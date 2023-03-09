@@ -10,7 +10,8 @@
   "private": true,
   "dependencies": {
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-number-format": "^5.1.4"
   },
   "devDependencies": {
     "@nrwl/cypress": "15.8.5",
