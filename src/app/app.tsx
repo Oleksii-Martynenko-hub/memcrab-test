@@ -47,9 +47,10 @@ export const NearestContext = createContext<{
 export const HoveredCellContext = createContext(0)
 
 export function App() {
-  const [rowsAmount, setRowsAmount] = useState<number | null>(null)
-  const [columnsAmount, setColumnsAmount] = useState<number | null>(null)
-  const [nearestAmount, setNearestAmount] = useState<number | null>(null)
+  const [rows, setRows] = useState<Row[]>([])
+  const [rowsAmount, setRowsAmount] = useState<number | null>(6)
+  const [columnsAmount, setColumnsAmount] = useState<number | null>(6)
+  const [nearestAmount, setNearestAmount] = useState<number | null>(3)
   
   const rowsAmountValue = useMemo(
     () => ({
@@ -78,9 +79,31 @@ export function App() {
   useEffect(() => {
     if (rowsAmount !== null && columnsAmount !== null) {
       const cellAmount = rowsAmount * columnsAmount
-      setNearestAmount((nearestAmount || 0) >= cellAmount ? cellAmount - 1 : nearestAmount)
+
+      if ((nearestAmount || 0) >= cellAmount) {
+        setNearestAmount(cellAmount - 1)
+      }
+
+      generatedDataRows(rowsAmount, columnsAmount)
     }
   }, [rowsAmount, columnsAmount])
+
+  const generatedDataRows = (rowsAmount: number, columnsAmount: number) => {
+    const rowsData = []
+
+    for (let r = 0; r < rowsAmount; r++) {
+      const cells = []
+
+      for (let c = 0; c < columnsAmount; c++) {
+        const amount = Math.floor(Math.random()*(999+1));
+        cells.push({ id: c, amount })
+      }
+
+      rowsData.push({ id: r, cells })
+    }
+
+    setRows(rowsData)
+  }
   
   return (
     <RowsContext.Provider value={rowsAmountValue}>
@@ -88,7 +111,7 @@ export function App() {
         <NearestContext.Provider value={nearestAmountValue}>
           <div className={styles.container}>
             <Header />
-          
+
           </div>
         </NearestContext.Provider>
       </ColumnsContext.Provider>
