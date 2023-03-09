@@ -3,6 +3,7 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 import Header from './header/header';
 
 import styles from './app.module.scss';
+import Table from './table/table';
 
 export interface InputData {
   rows: number;
@@ -112,6 +113,8 @@ export function App() {
           <div className={styles.container}>
             <Header />
 
+            <Table rows={rows} />
+          
           </div>
         </NearestContext.Provider>
       </ColumnsContext.Provider>
