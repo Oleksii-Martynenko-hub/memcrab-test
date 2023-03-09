@@ -1,5 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
 
+import Header from './header/header';
+
 import styles from './app.module.scss';
 
 export interface InputData {
@@ -85,6 +87,7 @@ export function App() {
       <ColumnsContext.Provider value={columnsAmountValue}>
         <NearestContext.Provider value={nearestAmountValue}>
           <div className={styles.container}>
+            <Header />
           
           </div>
         </NearestContext.Provider>
