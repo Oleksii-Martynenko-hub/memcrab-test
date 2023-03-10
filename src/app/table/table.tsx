@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState} from 'react';
 
 import { averageOfSum } from 'src/utils/average-of-sum';
 import { roundTo } from 'src/utils/roundTo';
@@ -14,6 +14,8 @@ export interface TableProps {
 
 export function Table({ rows, setRows }: TableProps) {
   const { columnsAmount } = useContext(ColumnsContext)
+
+  const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
 
   const sumRowValues = (cells: Cell[]) => {
     return cells.reduce((sum, { amount }) => sum + amount, 0)
@@ -46,6 +48,12 @@ export function Table({ rows, setRows }: TableProps) {
     setRows(prev => prev.filter(row => row.id !== rowId))
   }
 
+  const setHoveredCellOnMouseOver = (cell: Cell) => () => {
+    setHoveredCell(cell)
+  }
+
+  const removeHoveredCellOnMouseLeave = () => setHoveredCell(null)
+
   return (
     <table id="randomDigits" className={styles.table}>
       <thead>
@@ -71,7 +79,15 @@ export function Table({ rows, setRows }: TableProps) {
             </td>
 
             {cells.map(({ id: cellId, amount }) => (
-              <td key={cellId} onClick={incrementCellValueOnClick(rowId, cellId)}>{amount}</td>
+              <td 
+                key={cellId} 
+                className={styles.increment} 
+                onClick={incrementCellValueOnClick(rowId, cellId)}
+                onMouseOver={setHoveredCellOnMouseOver({ id: cellId, amount })}
+                onMouseLeave={removeHoveredCellOnMouseLeave}
+              >
+                {hoveredCell?.id === cellId ? `${amount} +1` : amount}
+              </td>
             ))}
 
             <td key={'sum' + rowId}>{sumRowValues(cells)}</td>
