@@ -1,4 +1,4 @@
-import { useContext} from 'react';
+import { useContext } from 'react';
 
 import { averageOfSum } from 'src/utils/average-of-sum';
 import { roundTo } from 'src/utils/roundTo';
@@ -42,10 +42,16 @@ export function Table({ rows, setRows }: TableProps) {
     }))
   }
 
+  const removeRowOnClick = (rowId: string) => () => {
+    setRows(prev => prev.filter(row => row.id !== rowId))
+  }
+
   return (
     <table id="randomDigits" className={styles.table}>
       <thead>
         <tr>
+          <th key='row-title-head' className={styles.rowHead}></th>
+
           {[...Array(columnsAmount).keys()].map((i) => (
             <th key={i}>Column { i + 1 }</th>
           ))}
@@ -57,6 +63,13 @@ export function Table({ rows, setRows }: TableProps) {
       <tbody>
         {rows.map(({ id: rowId, cells }) => (
           <tr key={rowId}>
+            <td key={'title' + rowId} className={styles.rowTitle}>
+              Row { +rowId + 1 }
+              <button className={styles.removeRowBtn} onClick={removeRowOnClick(rowId)}>
+                <span>-</span>
+              </button>
+            </td>
+
             {cells.map(({ id: cellId, amount }) => (
               <td key={cellId} onClick={incrementCellValueOnClick(rowId, cellId)}>{amount}</td>
             ))}
@@ -66,9 +79,12 @@ export function Table({ rows, setRows }: TableProps) {
         ))}
 
         <tr key='average'>
+          <td key='row-title-cell'></td>
+
           {[...Array(columnsAmount).keys()].map((i) => (
             <td key={i}>{averageColumnValues(i)}</td>
           ))}
+
           <td key='sum-empty-cell'></td>
         </tr>
       </tbody>

@@ -12,17 +12,52 @@
   thead {
     background-color: rgb(67, 67, 224);
     color: #ffffff;
-    text-align: left;
   }
 
   th {
-    min-width: auto;
+    min-width: 120px;
     width: auto;
     padding: 15px 15px;
     font-weight: 600;
 
     &:not(:last-of-type) {
       border-right: 1px solid #ffffff;
+    }
+
+    &.rowHead {
+      min-width: 150px;
+    }
+  }
+
+  .rowTitle {
+    background-color: rgb(118, 118, 192);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+  }
+
+  .removeRowBtn {
+    background-color: rgb(194, 54, 47);
+    color: #ffffff;
+    width: 28px;
+    height: 28px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    padding: 0;
+    margin-left: auto;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    
+    &:hover {
+      background-color: rgb(209, 90, 83);
+    }
+    
+    span {
+      display: block;
+      font-size: 34px;
+      margin-top: -7px;
     }
   }
 
