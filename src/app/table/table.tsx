@@ -44,6 +44,16 @@ export function Table({ rows, setRows }: TableProps) {
 
   return (
     <table id="randomDigits" className={styles.table}>
+      <thead>
+        <tr>
+          {[...Array(columnsAmount).keys()].map((i) => (
+            <th key={i}>Column { i + 1 }</th>
+          ))}
+
+          <th key='sum-head'>Sum values</th>
+        </tr>
+      </thead>
+
       <tbody>
         {rows.map(({ id: rowId, cells }) => (
           <tr key={rowId}>

@@ -9,6 +9,23 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   position: relative;
 
+  thead {
+    background-color: rgb(67, 67, 224);
+    color: #ffffff;
+    text-align: left;
+  }
+
+  th {
+    min-width: auto;
+    width: auto;
+    padding: 15px 15px;
+    font-weight: 600;
+
+    &:not(:last-of-type) {
+      border-right: 1px solid #ffffff;
+    }
+  }
+
   tr {
     border-bottom: 1px solid #dddddd;
 
