@@ -1,5 +1,8 @@
 import { useContext} from 'react';
 
+import { averageOfSum } from 'src/utils/average-of-sum';
+import { roundTo } from 'src/utils/roundTo';
+
 import { Cell, ColumnsContext, Row } from '../app';
 
 import styles from './table.module.scss';
@@ -12,18 +15,14 @@ export interface TableProps {
 export function Table({ rows, setRows }: TableProps) {
   const { columnsAmount } = useContext(ColumnsContext)
 
-  const average = (arr: number[]) => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
-  
-  const roundTo = (n: number, to: number) => {    
-    return +(Math.round(+(n + "e+" + to)) + "e-" + to);
-  }
-
   const sumRowValues = (cells: Cell[]) => {
     return cells.reduce((sum, { amount }) => sum + amount, 0)
   };
 
   const averageColumnValues = (index: number) => {
-    return roundTo(average(rows.map(({ cells }) => cells[index] ? cells[index].amount : 0)), 2)
+    const cellsValues = rows.map(({ cells }) => cells[index] ? cells[index].amount : 0)
+
+    return roundTo( averageOfSum(cellsValues), 2)
   };
 
   const incrementCellValueOnClick = (rowId: string, cellId: string) => () => {
