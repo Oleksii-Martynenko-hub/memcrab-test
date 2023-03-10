@@ -1,9 +1,10 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
 
+import { generateCells } from 'src/utils/generateCells';
 import Header from './header/header';
+import Table from './table/table';
 
 import styles from './app.module.scss';
-import Table from './table/table';
 
 export interface InputData {
   rows: number;
@@ -93,12 +94,7 @@ export function App() {
     const rowsData = []
 
     for (let r = 0; r < rowsAmount; r++) {
-      const cells = []
-
-      for (let c = 0; c < columnsAmount; c++) {
-        const amount = Math.floor(Math.random()*(999+1));
-        cells.push({ id: r.toString() + c.toString(), amount })
-      }
+      const cells = generateCells(r.toString(), columnsAmount)
 
       rowsData.push({ id: r.toString(), cells })
     }

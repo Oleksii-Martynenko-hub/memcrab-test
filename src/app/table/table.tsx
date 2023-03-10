@@ -1,6 +1,7 @@
 import { useContext, useState} from 'react';
 
 import { averageOfSum } from 'src/utils/average-of-sum';
+import { generateCells } from 'src/utils/generateCells';
 import { roundTo } from 'src/utils/roundTo';
 
 import { Cell, ColumnsContext, Row } from '../app';
@@ -48,6 +49,13 @@ export function Table({ rows, setRows }: TableProps) {
     setRows(prev => prev.filter(row => row.id !== rowId))
   }
 
+  const addRowOnClick = () => {
+    const rowId = (+rows[rows.length - 1].id + 1).toString()
+    const generatedCells = generateCells(rowId, columnsAmount || 0)
+
+    setRows(prev => [...prev, { id: rowId, cells: generatedCells }])
+  }
+
   const setHoveredCellOnMouseOver = (cell: Cell) => () => {
     setHoveredCell(cell)
   }
@@ -58,7 +66,11 @@ export function Table({ rows, setRows }: TableProps) {
     <table id="randomDigits" className={styles.table}>
       <thead>
         <tr>
-          <th key='row-title-head' className={styles.rowHead}></th>
+          <th key='row-title-head' className={styles.rowHead}>
+            <button className={styles.addRowBtn} onClick={addRowOnClick}>
+              + add row
+            </button>
+          </th>
 
           {[...Array(columnsAmount).keys()].map((i) => (
             <th key={i}>Column { i + 1 }</th>
@@ -95,7 +107,11 @@ export function Table({ rows, setRows }: TableProps) {
         ))}
 
         <tr key='average'>
-          <td key='row-title-cell'></td>
+          <td key='row-title-cell'>
+            <button className={styles.addRowBtn} onClick={addRowOnClick}>
+              + add row
+            </button>
+          </td>
 
           {[...Array(columnsAmount).keys()].map((i) => (
             <td key={i}>{averageColumnValues(i)}</td>
