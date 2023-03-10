@@ -12,12 +12,12 @@ export interface InputData {
 }
 
 export type Cell = {
-  id: number,
+  id: string,
   amount: number
 }
 
 export type Row = {
-  id: number;
+  id: string;
   cells: Cell[];
 }
 
@@ -97,10 +97,10 @@ export function App() {
 
       for (let c = 0; c < columnsAmount; c++) {
         const amount = Math.floor(Math.random()*(999+1));
-        cells.push({ id: c, amount })
+        cells.push({ id: r.toString() + c.toString(), amount })
       }
 
-      rowsData.push({ id: r, cells })
+      rowsData.push({ id: r.toString(), cells })
     }
 
     setRows(rowsData)
@@ -113,7 +113,7 @@ export function App() {
           <div className={styles.container}>
             <Header />
 
-            <Table rows={rows} />
+            <Table rows={rows} setRows={setRows} />
           
           </div>
         </NearestContext.Provider>
