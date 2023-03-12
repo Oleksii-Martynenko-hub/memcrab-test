@@ -53,12 +53,14 @@ export function Header(props: HeaderProps) {
           onChange={setRowsAmountOnChange} 
           validate={rowColValidation} 
           placeholder="Rows"
+          tooltip='Rows amount needs for the table generation. You can create or remove rows in the table.'
         />
         <InputNumber 
           value={columnsAmount} 
           onChange={setColumnsAmountOnChange} 
           validate={rowColValidation} 
           placeholder="Columns"
+          tooltip='Columns amount needs for the table generation.'
         />
         <InputNumber 
           value={nearestAmount} 
@@ -66,6 +68,7 @@ export function Header(props: HeaderProps) {
           validate={amountNearestValidation}
           disabled={rowsAmount === null || columnsAmount === null}
           placeholder="Nearest values"
+          tooltip='Quantity cells to highlight with amount nearest to the value in the hovered cell. It can`t be more than the product of multiplication of Rows and Columns.'
         />
 
       </div>

@@ -5,9 +5,10 @@ export interface InputNumberProps extends Omit<NumericFormatProps, 'value' | 'on
   value: number | null;
   onChange: (value: number | undefined) => void;
   validate: (value: number) => boolean;
+  tooltip?: string
 }
 
-export function InputNumber({ value, onChange, validate, ...props}: InputNumberProps) {
+export function InputNumber({ value, onChange, validate, tooltip, ...props}: InputNumberProps) {
 
   const onValueChange: OnValueChange = (v) => {
     onChange(v.floatValue)
@@ -18,15 +19,21 @@ export function InputNumber({ value, onChange, validate, ...props}: InputNumberP
   }
 
   return (
-    <NumericFormat 
-      className={styles.input}
-      value={value}
-      onValueChange={onValueChange}
-      allowNegative={false} 
-      decimalScale={0} 
-      isAllowed={isAllowed}
-      { ...props}
-    />
+    <div className={styles.inputWrapper}>
+      <NumericFormat 
+        className={styles.input}
+        value={value}
+        onValueChange={onValueChange}
+        allowNegative={false} 
+        decimalScale={0} 
+        isAllowed={isAllowed}
+        { ...props}
+      />
+      {tooltip && <div className={styles.tooltip}>
+        ?
+        <p className={styles.tooltipText}>{tooltip}</p>
+      </div>}
+    </div>
   );
 }
 
