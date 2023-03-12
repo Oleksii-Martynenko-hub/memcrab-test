@@ -4,7 +4,7 @@ import { averageOfSum } from 'src/utils/average-of-sum';
 import { generateCells } from 'src/utils/generateCells';
 import { roundTo } from 'src/utils/roundTo';
 
-import { Cell, ColumnsContext, NearestContext, Row } from '../app';
+import { Cell, ColumnsContext, NearestContext, Row, RowsContext } from '../app';
 
 import styles from './table.module.scss';
 
@@ -14,6 +14,7 @@ export interface TableProps {
 }
 
 export function Table({ rows, setRows }: TableProps) {
+  const { setRowsAmount } = useContext(RowsContext)
   const { columnsAmount } = useContext(ColumnsContext)
   const { nearestAmount } = useContext(NearestContext)
 
@@ -61,6 +62,8 @@ export function Table({ rows, setRows }: TableProps) {
 
   const removeRowOnClick = (rowId: string) => () => {
     setRows(prev => prev.filter(row => row.id !== rowId))
+
+    setRowsAmount(prev => (prev || 0) - 1)
   }
 
   const addRowOnClick = () => {
@@ -68,6 +71,8 @@ export function Table({ rows, setRows }: TableProps) {
     const generatedCells = generateCells(rowId, columnsAmount || 0)
 
     setRows(prev => [...prev, { id: rowId, cells: generatedCells }])
+
+    setRowsAmount(prev => (prev || 0) + 1)
   }
 
   const findNearestValuesToHoveredCell = (cell: Cell, nearestAmount: number) => {
@@ -205,7 +210,7 @@ export function Table({ rows, setRows }: TableProps) {
             <td key={i} className={styles.averageCell}>{rows.length ? averageColumnValues(i) : 0}</td>
           ))}
 
-          <td key='sum-empty-cell'>-</td>
+          <td key='sum-empty-cell'>{!rows.length && !columnsAmount ? 'empty' : '-'}</td>
         </tr>
       </tbody>
     </table>

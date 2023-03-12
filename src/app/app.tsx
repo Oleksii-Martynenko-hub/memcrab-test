@@ -79,18 +79,17 @@ export function App() {
   )
 
   useEffect(() => {
-    if (rowsAmount !== null && columnsAmount !== null) {
-      const cellAmount = rowsAmount * columnsAmount
+    const cellAmount = (rowsAmount || 0) * (columnsAmount || 0)
 
-      if ((nearestAmount || 0) >= cellAmount) {
-        setNearestAmount(cellAmount - 1)
+    if (nearestAmount !== null && nearestAmount >= cellAmount) {
+      setNearestAmount(cellAmount < 1 ? 0 : cellAmount - 1)
     }
 
-      generatedDataRows(rowsAmount, columnsAmount)
-    }
+    generateDataRows(rowsAmount || 0, columnsAmount || 0)
+    
   }, [rowsAmount, columnsAmount])
 
-  const generatedDataRows = (rowsAmount: number, columnsAmount: number) => {
+  const generateDataRows = (rowsAmount: number, columnsAmount: number) => {
     const rowsData = []
 
     for (let r = 0; r < rowsAmount; r++) {
