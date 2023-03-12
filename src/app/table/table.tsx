@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { generateCells } from 'src/utils/generateCells';
 
 import {
   Cell,
   ColumnsContext,
-  HoveredSumRowContext,
   NearestContext,
   RowsAmountContext,
   RowsContext
 } from '../app';
 import SumCell from '../sum-cell/sum-cell';
+import DataCell from '../data-cell/data-cell';
 import HeaderTable from '../header-table/header-table';
 import FooterTable from '../footer-table/footer-table';
 import RowTitleCell from '../row-title-cell/row-title-cell';
@@ -25,7 +25,6 @@ export function Table(props: TableProps) {
   const { setRowsAmount } = useContext(RowsAmountContext)
   const { columnsAmount } = useContext(ColumnsContext)
   const { nearestAmount } = useContext(NearestContext)
-  const { hoveredSumRow } = useContext(HoveredSumRowContext)
 
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>([])
@@ -40,29 +39,6 @@ export function Table(props: TableProps) {
   }, [hoveredCell])
   
 
-  const sumRowValues = (cells: Cell[]) => {
-    return cells.reduce((sum, { amount }) => sum + amount, 0)
-  };  
-
-  const incrementCellValueOnClick = (rowId: string, cellId: string) => () => {
-    setRows(prev => prev.map(row => {
-      if (row.id === rowId) {
-        const updatedCells = row.cells.map(cell => {
-          if (cell.id === cellId) setHoveredCell({ ...cell, amount: cell.amount + 1 })
-          return cell.id === cellId ? { ...cell, amount: cell.amount + 1 } : cell
-        })
-        
-        return {
-          ...row,
-          cells: updatedCells
-        }
-      }
-
-      return row
-    }))
-  }
-
-
   const addRow = () => {
     const rowId = rows.length ? (+rows[rows.length - 1].id + 1).toString().padStart(3, "0") : "000"
     const generatedCells = generateCells(rowId, columnsAmount || 0)
@@ -73,6 +49,7 @@ export function Table(props: TableProps) {
   }
 
   const findNearestValuesToHoveredCell = (cell: Cell, nearestAmount: number) => {
+    const start = Date.now()
     const nearestCells: (Cell & {indexOfCommonArr: number })[] = []
 
     const commonCells = rows
@@ -119,16 +96,9 @@ export function Table(props: TableProps) {
     }
 
     getNearestCellsByIndex(nearestAmount, indexOfCell)
-    
+    const end = Date.now();
+    console.log('time: ' + (end - start));
     return nearestCells.map(c => c.id)
-  }
-
-  const setHoveredCellOnMouseOver = (cell: Cell) => () => {
-    setHoveredCell(cell)
-  }
-
-  const removeHoveredCellOnMouseLeave = () => {
-    setHoveredCell(null)
   }
 
   return (
@@ -141,21 +111,16 @@ export function Table(props: TableProps) {
             <RowTitleCell rowId={rowId} />
 
             {cells.map(({ id: cellId, amount }) => (
-              <td 
-                key={cellId} 
-                className={`${styles.increment} ${hoveredSumRow === rowId && styles.percentGradient} ${nearestCellIdsByAmount.includes(cellId) && styles.nearest}`} 
-                style={{ "--percent": `${(amount / sumRowValues(cells) * 100).toFixed(2)}%` } as React.CSSProperties}
-                onClick={incrementCellValueOnClick(rowId, cellId)}
-                onMouseOver={setHoveredCellOnMouseOver({ id: cellId, amount })}
-                onMouseLeave={removeHoveredCellOnMouseLeave}
-              >
-                {hoveredCell?.id === cellId 
-                  ? `${amount} +1` 
-                  : hoveredSumRow === rowId 
-                    ? `${(amount / sumRowValues(cells) * 100).toFixed(2)}%` 
-                    : amount
-                }
-              </td>
+              <DataCell
+                key={cellId}
+                cellId={cellId}
+                rowId={rowId}
+                amount={amount}
+                cells={cells}
+                isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
+                isHovered={hoveredCell?.id === cellId }
+                setHoveredCell={setHoveredCell}
+              />
             ))}
 
             <SumCell rowId={rowId} cells={cells} />
