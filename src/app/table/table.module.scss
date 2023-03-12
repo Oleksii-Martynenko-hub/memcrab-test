@@ -6,14 +6,6 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   position: relative;
 
-  .sumCell {
-    background-color: rgb(181, 236, 171);
-    
-    &:hover {
-      background-color: rgb(150, 220, 138);
-    }
-  }
-
   tr {
     border-bottom: 1px solid #dddddd;
 

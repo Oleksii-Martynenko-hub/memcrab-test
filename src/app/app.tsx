@@ -54,6 +54,14 @@ export const RowsContext = createContext<{
   setRows: () => void 0,
 })
 
+export const HoveredSumRowContext = createContext<{
+  hoveredSumRow: string | null
+  setHoveredSumRow: React.Dispatch<React.SetStateAction<string | null>>
+}>({
+  hoveredSumRow: null,
+  setHoveredSumRow: () => void 0,
+})
+
 export const HoveredCellContext = createContext(0)
 
 export function App() {
@@ -61,6 +69,7 @@ export function App() {
   const [rowsAmount, setRowsAmount] = useState<number | null>(null)
   const [columnsAmount, setColumnsAmount] = useState<number | null>(null)
   const [nearestAmount, setNearestAmount] = useState<number | null>(null)
+  const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null) //
   
   const rowsAmountValue = useMemo(
     () => ({
@@ -92,6 +101,14 @@ export function App() {
       setRows,
     }),
     [rows],
+  )
+
+  const hoveredSumRowValue = useMemo(
+    () => ({
+      hoveredSumRow,
+      setHoveredSumRow,
+    }),
+    [hoveredSumRow],
   )
 
   useEffect(() => {
@@ -127,12 +144,14 @@ export function App() {
       <ColumnsContext.Provider value={columnsAmountValue}>
         <NearestContext.Provider value={nearestAmountValue}>
           <RowsContext.Provider value={rowsValue}>
-            <div className={styles.container}>
-              <Header />
+            <HoveredSumRowContext.Provider value={hoveredSumRowValue}>
+              <div className={styles.container}>
+                <Header />
 
-              <Table />
-            
-            </div>
+                <Table />
+              
+              </div>
+            </HoveredSumRowContext.Provider>
           </RowsContext.Provider>
         </NearestContext.Provider>
       </ColumnsContext.Provider>

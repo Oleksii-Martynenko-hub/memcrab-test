@@ -5,10 +5,12 @@ import { generateCells } from 'src/utils/generateCells';
 import {
   Cell,
   ColumnsContext,
+  HoveredSumRowContext,
   NearestContext,
   RowsAmountContext,
   RowsContext
 } from '../app';
+import SumCell from '../sum-cell/sum-cell';
 import HeaderTable from '../header-table/header-table';
 import FooterTable from '../footer-table/footer-table';
 import RowTitleCell from '../row-title-cell/row-title-cell';
@@ -23,9 +25,9 @@ export function Table(props: TableProps) {
   const { setRowsAmount } = useContext(RowsAmountContext)
   const { columnsAmount } = useContext(ColumnsContext)
   const { nearestAmount } = useContext(NearestContext)
+  const { hoveredSumRow } = useContext(HoveredSumRowContext)
 
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
-  const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null)
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>([])
 
   useEffect(() => {
@@ -129,14 +131,6 @@ export function Table(props: TableProps) {
     setHoveredCell(null)
   }
 
-  const setHoveredSumRowOnMouseOver = (rowId: string) => () => {
-    setHoveredSumRow(rowId)
-  }
-
-  const removeHoveredSumRowOnMouseLeave = () => {
-    setHoveredSumRow(null)
-  }
-
   return (
     <table id="randomDigits" className={styles.table}>
       <HeaderTable addRow={addRow} />
@@ -164,14 +158,7 @@ export function Table(props: TableProps) {
               </td>
             ))}
 
-            <td 
-              key={'sum' + rowId} 
-              className={styles.sumCell}
-              onMouseOver={setHoveredSumRowOnMouseOver(rowId)}
-              onMouseLeave={removeHoveredSumRowOnMouseLeave}
-            >
-              {sumRowValues(cells)}
-            </td>
+            <SumCell rowId={rowId} cells={cells} />
           </tr>
         ))}
 
