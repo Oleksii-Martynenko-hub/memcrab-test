@@ -90,6 +90,11 @@ export function App() {
   }, [rowsAmount, columnsAmount])
 
   const generateDataRows = (rowsAmount: number, columnsAmount: number) => {
+    if (
+      (rows.length && rows[0].cells.length) && 
+      (rowsAmount === rows.length && columnsAmount === rows[0].cells.length)
+    ) return
+
     const rowsData = []
 
     for (let r = 0; r < rowsAmount; r++) {
