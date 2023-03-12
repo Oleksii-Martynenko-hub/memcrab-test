@@ -1,0 +1,16 @@
+.averageRow {
+  background-color: rgb(67, 67, 224);
+  height: 60px;
+  position: sticky;
+  bottom: -3px;
+  z-index: 1;
+}
+
+.averageCell {
+  background-color: rgb(255 241 197);
+  
+  &.empty {
+    background: #fff;
+    right: 0;
+  }
+}

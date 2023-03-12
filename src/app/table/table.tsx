@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { roundTo } from 'src/utils/roundTo';
-import { averageOfSum } from 'src/utils/average-of-sum';
 import { generateCells } from 'src/utils/generateCells';
 
 import {
@@ -14,6 +12,7 @@ import {
 
 import styles from './table.module.scss';
 import HeaderTable from '../header-table/header-table';
+import FooterTable from '../footer-table/footer-table';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TableProps {}
@@ -40,13 +39,7 @@ export function Table(props: TableProps) {
 
   const sumRowValues = (cells: Cell[]) => {
     return cells.reduce((sum, { amount }) => sum + amount, 0)
-  };
-
-  const averageColumnValues = (index: number) => {
-    const cellsValues = rows.map(({ cells }) => cells[index] ? cells[index].amount : 0)
-
-    return roundTo( averageOfSum(cellsValues), 2)
-  };
+  };  
 
   const incrementCellValueOnClick = (rowId: string, cellId: string) => () => {
     setRows(prev => prev.map(row => {
@@ -191,19 +184,7 @@ export function Table(props: TableProps) {
           </tr>
         ))}
 
-        <tr key='average'  className={styles.averageRow}>
-          <td key='row-title-cell' className={styles.tableHead}>
-              <button className={styles.addRowBtn} onClick={addRow}>
-                + add row
-              </button>
-          </td>
-
-          {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
-            <td key={i} className={styles.averageCell}>{rows.length ? averageColumnValues(i) : 0}</td>
-          ))}
-
-          <td key='sum-empty-cell'>{!rows.length && !columnsAmount ? 'empty' : '-'}</td>
-        </tr>
+        <FooterTable addRow={addRow} />
       </tbody>
     </table>
   );

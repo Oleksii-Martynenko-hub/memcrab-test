@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 
 import { ColumnsContext } from '../app';
+import Button from '../button/button';
 
 import styles from './header-table.module.scss';
 
@@ -19,9 +20,9 @@ export function HeaderTable({ addRow, ...props }: HeaderTableProps) {
     <thead className={styles.tableHead} {...props}>
         <tr>
           <th key='row-title-head' className={styles.rowHead}>
-            <button className={styles.addRowBtn} onClick={addRowOnClick}>
+            <Button onClick={addRowOnClick}>
               + add row
-            </button>
+            </Button>
           </th>
 
           {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
