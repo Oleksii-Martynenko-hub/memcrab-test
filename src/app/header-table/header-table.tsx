@@ -20,17 +20,24 @@ export function HeaderTable({ addRow, ...props }: HeaderTableProps) {
     <thead className={styles.tableHead} {...props}>
         <tr>
           <th key='row-title-head' className={styles.rowHead}>
-            <Button onClick={addRowOnClick}>
-              + add row
-            </Button>
+            <div className={`${styles.cellWrapWithBorder} ${styles.rowTitleWrap}`}>
+              <Button onClick={addRowOnClick}>
+                + add row
+              </Button>
+              </div>
           </th>
 
           {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
-            <th key={i}>Column { i + 1 }</th>
+            
+            <th key={i}>
+              <div className={styles.cellWrapWithBorder}>
+                Column { i + 1 }
+              </div>
+            </th>
           ))}
 
           <th key='sum-head' className={styles.sumColHead}>
-            <div className={styles.titleWrap}>Sum values</div>
+            <div className={`${styles.cellWrapWithBorder} ${styles.sumTitleWrap}`}>Sum values</div>
           </th>
         </tr>
       </thead>

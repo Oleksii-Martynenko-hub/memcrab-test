@@ -28,10 +28,12 @@ export function FooterTable({ addRow, ...props }: FooterTableProps) {
 
   return (
     <tr key='footer-table'  className={styles.averageRow} {...props}>
-      <td key='row-title-cell' className={styles.tableHead}>
-        <Button onClick={addRowOnClick}>
-          + add row
-        </Button>
+      <td key='row-title-cell' className={`${styles.averageCell} ${styles.rowTitle}`}>
+        <div className={styles.cellWrapWithBorder}>
+          <Button onClick={addRowOnClick}>
+            + add row
+          </Button>
+        </div>
       </td>
 
       {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (

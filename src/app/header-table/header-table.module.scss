@@ -9,7 +9,6 @@ thead {
 th {
   min-width: 120px;
   width: auto;
-  padding: 15px 15px;
   font-weight: 600;
 
   &:not(:last-of-type) {
@@ -18,5 +17,31 @@ th {
   
   &.rowHead {
     min-width: 150px;
+    position: sticky;
+    left: 0;
+  }
+}
+
+.sumColHead {
+  background-color: rgb(67, 67, 224);
+  position: sticky;
+  right: 0;
+  padding: 0;
+}
+
+.cellWrapWithBorder {
+  border-right: 1px solid #ffffff;
+  background-color: rgb(67, 67, 224);
+  padding: 15px 15px;
+  margin: -1px -2px -1px 0px;
+  line-height: 34px;
+  
+  &.rowTitleWrap {
+    margin: -1px -1px -1px -1px;
+  }
+  
+  &.sumTitleWrap {
+    margin: -1px -1px -1px -1px;
+    border-left: 1px solid #ffffff;
   }
 }
