@@ -1,10 +1,10 @@
-import { useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 
 import { averageOfSum } from 'src/utils/average-of-sum';
 import { generateCells } from 'src/utils/generateCells';
 import { roundTo } from 'src/utils/roundTo';
 
-import { Cell, ColumnsContext, Row } from '../app';
+import { Cell, ColumnsContext, NearestContext, Row } from '../app';
 
 import styles from './table.module.scss';
 
@@ -15,8 +15,10 @@ export interface TableProps {
 
 export function Table({ rows, setRows }: TableProps) {
   const { columnsAmount } = useContext(ColumnsContext)
+  const { nearestAmount } = useContext(NearestContext)
 
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
+  const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>([])
 
   const sumRowValues = (cells: Cell[]) => {
     return cells.reduce((sum, { amount }) => sum + amount, 0)
@@ -56,11 +58,71 @@ export function Table({ rows, setRows }: TableProps) {
     setRows(prev => [...prev, { id: rowId, cells: generatedCells }])
   }
 
-  const setHoveredCellOnMouseOver = (cell: Cell) => () => {
-    setHoveredCell(cell)
+  const findNearestValuesToHoveredCell = (cell: Cell, nearestAmount: number) => {
+    const nearestCells: (Cell & {indexOfCommonArr: number })[] = []
+
+    const commonCells = rows
+      .reduce((acc: Cell[], { cells }) => {
+        return [...acc, ...cells]
+      }, [])
+      .sort((a, b) => a.amount - b.amount)
+
+    const indexOfCell = commonCells.map(c => c.id).indexOf(cell.id)
+
+    const getNearestCellsByIndex = (
+      amount: number,
+      indexOfStart: number,
+      differenceIncrement = 0,
+      isIncrementIndex = true
+    ) => {
+      if (nearestCells.length < nearestAmount) {
+        for (let x = 0; x < amount; x++) {
+          const needlyIndex = isIncrementIndex ? indexOfStart + 1 + x : indexOfStart - (1 + x)
+          if (commonCells[needlyIndex] && Math.abs(commonCells[needlyIndex].amount - cell.amount) === differenceIncrement) {
+            nearestCells.push({ ...commonCells[needlyIndex], indexOfCommonArr: needlyIndex })
+            continue
+          }
+          break
+        }
+
+        nearestCells.sort((a, b) => a.indexOfCommonArr - b.indexOfCommonArr)
+
+        const updateIndexOfStart = nearestCells.length 
+          ? isIncrementIndex 
+            ? indexOfCell + 1 === nearestCells[0].indexOfCommonArr ? indexOfCell : nearestCells[0].indexOfCommonArr
+            : indexOfCell - 1 === nearestCells[nearestCells.length - 1].indexOfCommonArr ? indexOfCell : nearestCells[nearestCells.length - 1].indexOfCommonArr
+          : isIncrementIndex 
+            ? indexOfCell
+            : indexOfCell
+
+        getNearestCellsByIndex(
+          nearestAmount - nearestCells.length,
+          updateIndexOfStart,
+          isIncrementIndex ? differenceIncrement : differenceIncrement + 1,
+          !isIncrementIndex,
+        )
+      }
+    }
+
+    getNearestCellsByIndex(nearestAmount, indexOfCell)
+
+    return nearestCells.map(c => c.id)
   }
 
-  const removeHoveredCellOnMouseLeave = () => setHoveredCell(null)
+  const setHoveredCellOnMouseOver = (cell: Cell) => () => {
+    setHoveredCell(cell)
+
+    if (nearestAmount !== null) {
+      const nearestValues = findNearestValuesToHoveredCell(cell, nearestAmount)
+        
+      setNearestCellsByAmount(nearestValues)
+    } 
+  }
+
+  const removeHoveredCellOnMouseLeave = () => {
+    setHoveredCell(null)
+    setNearestCellsByAmount([])
+  }
 
   return (
     <table id="randomDigits" className={styles.table}>
@@ -93,7 +155,7 @@ export function Table({ rows, setRows }: TableProps) {
             {cells.map(({ id: cellId, amount }) => (
               <td 
                 key={cellId} 
-                className={styles.increment} 
+                className={`${styles.increment} ${nearestCellIdsByAmount.includes(cellId) && styles.nearest}`} 
                 onClick={incrementCellValueOnClick(rowId, cellId)}
                 onMouseOver={setHoveredCellOnMouseOver({ id: cellId, amount })}
                 onMouseLeave={removeHoveredCellOnMouseLeave}
@@ -108,9 +170,9 @@ export function Table({ rows, setRows }: TableProps) {
 
         <tr key='average'>
           <td key='row-title-cell'>
-            <button className={styles.addRowBtn} onClick={addRowOnClick}>
-              + add row
-            </button>
+              <button className={styles.addRowBtn} onClick={addRowOnClick}>
+                + add row
+              </button>
           </td>
 
           {[...Array(columnsAmount).keys()].map((i) => (

@@ -50,9 +50,9 @@ export const HoveredCellContext = createContext(0)
 
 export function App() {
   const [rows, setRows] = useState<Row[]>([])
-  const [rowsAmount, setRowsAmount] = useState<number | null>(6)
-  const [columnsAmount, setColumnsAmount] = useState<number | null>(6)
-  const [nearestAmount, setNearestAmount] = useState<number | null>(3)
+  const [rowsAmount, setRowsAmount] = useState<number | null>(null)
+  const [columnsAmount, setColumnsAmount] = useState<number | null>(null)
+  const [nearestAmount, setNearestAmount] = useState<number | null>(null)
   
   const rowsAmountValue = useMemo(
     () => ({
@@ -84,7 +84,7 @@ export function App() {
 
       if ((nearestAmount || 0) >= cellAmount) {
         setNearestAmount(cellAmount - 1)
-      }
+    }
 
       generatedDataRows(rowsAmount, columnsAmount)
     }
