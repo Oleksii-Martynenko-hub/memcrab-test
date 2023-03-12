@@ -18,6 +18,7 @@ export function Table({ rows, setRows }: TableProps) {
   const { nearestAmount } = useContext(NearestContext)
 
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
+  const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null)
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>([])
 
   const sumRowValues = (cells: Cell[]) => {
@@ -105,7 +106,7 @@ export function Table({ rows, setRows }: TableProps) {
     }
 
     getNearestCellsByIndex(nearestAmount, indexOfCell)
-
+    
     return nearestCells.map(c => c.id)
   }
 
@@ -124,14 +125,22 @@ export function Table({ rows, setRows }: TableProps) {
     setNearestCellsByAmount([])
   }
 
+  const setHoveredSumRowOnMouseOver = (rowId: string) => () => {
+    setHoveredSumRow(rowId)
+  }
+
+  const removeHoveredSumRowOnMouseLeave = () => {
+    setHoveredSumRow(null)
+  }
+
   return (
     <table id="randomDigits" className={styles.table}>
       <thead>
         <tr>
           <th key='row-title-head' className={styles.rowHead}>
-            <button className={styles.addRowBtn} onClick={addRowOnClick}>
-              + add row
-            </button>
+              <button className={styles.addRowBtn} onClick={addRowOnClick}>
+                + add row
+              </button>
           </th>
 
           {[...Array(columnsAmount).keys()].map((i) => (
@@ -155,16 +164,29 @@ export function Table({ rows, setRows }: TableProps) {
             {cells.map(({ id: cellId, amount }) => (
               <td 
                 key={cellId} 
-                className={`${styles.increment} ${nearestCellIdsByAmount.includes(cellId) && styles.nearest}`} 
+                className={`${styles.increment} ${hoveredSumRow === rowId && styles.percentGradient} ${nearestCellIdsByAmount.includes(cellId) && styles.nearest}`} 
+                style={{ "--percent": `${(amount / sumRowValues(cells) * 100).toFixed(2)}%` } as React.CSSProperties}
                 onClick={incrementCellValueOnClick(rowId, cellId)}
                 onMouseOver={setHoveredCellOnMouseOver({ id: cellId, amount })}
                 onMouseLeave={removeHoveredCellOnMouseLeave}
               >
-                {hoveredCell?.id === cellId ? `${amount} +1` : amount}
+                {hoveredCell?.id === cellId 
+                  ? `${amount} +1` 
+                  : hoveredSumRow === rowId 
+                    ? `${(amount / sumRowValues(cells) * 100).toFixed(2)}%` 
+                    : amount
+                }
               </td>
             ))}
 
-            <td key={'sum' + rowId}>{sumRowValues(cells)}</td>
+            <td 
+              key={'sum' + rowId} 
+              className={styles.sumCell}
+              onMouseOver={setHoveredSumRowOnMouseOver(rowId)}
+              onMouseLeave={removeHoveredSumRowOnMouseLeave}
+            >
+              {sumRowValues(cells)}
+            </td>
           </tr>
         ))}
 

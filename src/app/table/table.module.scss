@@ -35,6 +35,14 @@
     display: flex;
     align-items: center;
   }
+  
+  .sumCell {
+    background-color: rgb(181, 236, 171);
+    
+    &:hover {
+      background-color: rgb(150, 220, 138);
+    }
+  }
 
   .removeRowBtn {
     background-color: rgb(194, 54, 47);
@@ -99,6 +107,10 @@
     
     &.nearest {
       background-color: #b2dc90;
+    }
+
+    &.percentGradient {
+      background: linear-gradient(to top, rgba(104, 206, 237, 0.48) 0%, rgba(79, 196, 232, 0.52) var(--percent), rgb(255, 255, 255) var(--percent));
     }
 
     &:not(:last-of-type) {
