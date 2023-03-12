@@ -9,10 +9,11 @@ import {
   RowsAmountContext,
   RowsContext
 } from '../app';
-
-import styles from './table.module.scss';
 import HeaderTable from '../header-table/header-table';
 import FooterTable from '../footer-table/footer-table';
+import RowTitleCell from '../row-title-cell/row-title-cell';
+
+import styles from './table.module.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TableProps {}
@@ -59,11 +60,6 @@ export function Table(props: TableProps) {
     }))
   }
 
-  const removeRowOnClick = (rowId: string) => () => {
-    setRows(prev => prev.filter(row => row.id !== rowId))
-
-    setRowsAmount(prev => (prev || 0) - 1)
-  }
 
   const addRow = () => {
     const rowId = rows.length ? (+rows[rows.length - 1].id + 1).toString().padStart(3, "0") : "000"
@@ -148,12 +144,7 @@ export function Table(props: TableProps) {
       <tbody>
         {rows.map(({ id: rowId, cells }) => (
           <tr key={rowId}>
-            <td key={'title' + rowId} className={styles.rowTitle}>
-              Row { +rowId + 1 }
-              <button className={styles.removeRowBtn} onClick={removeRowOnClick(rowId)}>
-                <span>-</span>
-              </button>
-            </td>
+            <RowTitleCell rowId={rowId} />
 
             {cells.map(({ id: cellId, amount }) => (
               <td 

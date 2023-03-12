@@ -6,44 +6,11 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   position: relative;
 
-  .rowTitle {
-    background-color: rgb(118, 118, 192);
-    color: #ffffff; 
-    display: flex;
-    align-items: center;
-  }
-
   .sumCell {
     background-color: rgb(181, 236, 171);
     
     &:hover {
       background-color: rgb(150, 220, 138);
-    }
-  }
-
-  .removeRowBtn {
-    background-color: rgb(194, 54, 47);
-    color: #ffffff;
-    width: 28px;
-    height: 28px;
-    border: none;
-    outline: none;
-    border-radius: 4px;
-    padding: 0;
-    margin-left: auto;
-    cursor: pointer;
-    user-select: none;
-    overflow: hidden;
-    transition: background-color 0.2s;
-    
-    &:hover {
-      background-color: rgb(209, 90, 83);
-    }
-    
-    span {
-      display: block;
-      font-size: 34px;
-      margin-top: -7px;
     }
   }
 
