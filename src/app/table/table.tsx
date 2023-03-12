@@ -49,7 +49,6 @@ export function Table(props: TableProps) {
   }
 
   const findNearestValuesToHoveredCell = (cell: Cell, nearestAmount: number) => {
-    const start = Date.now()
     const nearestCells: (Cell & {indexOfCommonArr: number })[] = []
 
     const commonCells = rows
@@ -96,8 +95,7 @@ export function Table(props: TableProps) {
     }
 
     getNearestCellsByIndex(nearestAmount, indexOfCell)
-    const end = Date.now();
-    console.log('time: ' + (end - start));
+
     return nearestCells.map(c => c.id)
   }
 
