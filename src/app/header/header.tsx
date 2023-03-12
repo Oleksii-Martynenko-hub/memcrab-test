@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 
-import { ColumnsContext, NearestContext, RowsContext } from '../app';
+import { ColumnsContext, NearestContext, RowsAmountContext } from '../app';
 import InputNumber from '../input-number/input-number';
 
 import styles from './header.module.scss';
@@ -9,7 +9,7 @@ import styles from './header.module.scss';
 export interface HeaderProps {}
 
 export function Header(props: HeaderProps) {
-  const { rowsAmount, setRowsAmount } = useContext(RowsContext)
+  const { rowsAmount, setRowsAmount } = useContext(RowsAmountContext)
   const { columnsAmount, setColumnsAmount } = useContext(ColumnsContext)
   const { nearestAmount, setNearestAmount } = useContext(NearestContext)
 

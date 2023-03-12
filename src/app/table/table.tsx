@@ -1,20 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+import { roundTo } from 'src/utils/roundTo';
 import { averageOfSum } from 'src/utils/average-of-sum';
 import { generateCells } from 'src/utils/generateCells';
-import { roundTo } from 'src/utils/roundTo';
 
-import { Cell, ColumnsContext, NearestContext, Row, RowsContext } from '../app';
+import {
+  Cell,
+  ColumnsContext,
+  NearestContext,
+  RowsAmountContext,
+  RowsContext
+} from '../app';
 
 import styles from './table.module.scss';
+import HeaderTable from '../header-table/header-table';
 
-export interface TableProps {
-  rows: Row[]
-  setRows: React.Dispatch<React.SetStateAction<Row[]>>
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface TableProps {}
 
-export function Table({ rows, setRows }: TableProps) {
-  const { setRowsAmount } = useContext(RowsContext)
+export function Table(props: TableProps) {
+  const { rows, setRows } = useContext(RowsContext)
+  const { setRowsAmount } = useContext(RowsAmountContext)
   const { columnsAmount } = useContext(ColumnsContext)
   const { nearestAmount } = useContext(NearestContext)
 
@@ -66,7 +72,7 @@ export function Table({ rows, setRows }: TableProps) {
     setRowsAmount(prev => (prev || 0) - 1)
   }
 
-  const addRowOnClick = () => {
+  const addRow = () => {
     const rowId = rows.length ? (+rows[rows.length - 1].id + 1).toString().padStart(3, "0") : "000"
     const generatedCells = generateCells(rowId, columnsAmount || 0)
 
@@ -144,21 +150,7 @@ export function Table({ rows, setRows }: TableProps) {
 
   return (
     <table id="randomDigits" className={styles.table}>
-      <thead className={styles.tableHead}>
-        <tr>
-          <th key='row-title-head' className={styles.rowHead}>
-              <button className={styles.addRowBtn} onClick={addRowOnClick}>
-                + add row
-              </button>
-          </th>
-
-          {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
-            <th key={i}>Column { i + 1 }</th>
-          ))}
-
-          <th key='sum-head'>Sum values</th>
-        </tr>
-      </thead>
+      <HeaderTable addRow={addRow} />
 
       <tbody>
         {rows.map(({ id: rowId, cells }) => (
@@ -201,7 +193,7 @@ export function Table({ rows, setRows }: TableProps) {
 
         <tr key='average'  className={styles.averageRow}>
           <td key='row-title-cell' className={styles.tableHead}>
-              <button className={styles.addRowBtn} onClick={addRowOnClick}>
+              <button className={styles.addRowBtn} onClick={addRow}>
                 + add row
               </button>
           </td>

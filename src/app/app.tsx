@@ -22,7 +22,7 @@ export type Row = {
   cells: Cell[];
 }
 
-export const RowsContext = createContext<{
+export const RowsAmountContext = createContext<{
   rowsAmount: number | null
   setRowsAmount: React.Dispatch<React.SetStateAction<number | null>>
 }>({
@@ -44,6 +44,14 @@ export const NearestContext = createContext<{
 }>({
   nearestAmount: null,
   setNearestAmount: () => void 0,
+})
+
+export const RowsContext = createContext<{
+  rows: Row[]
+  setRows: React.Dispatch<React.SetStateAction<Row[]>>
+}>({
+  rows: [],
+  setRows: () => void 0,
 })
 
 export const HoveredCellContext = createContext(0)
@@ -78,6 +86,14 @@ export function App() {
     [nearestAmount],
   )
 
+  const rowsValue = useMemo(
+    () => ({
+      rows,
+      setRows,
+    }),
+    [rows],
+  )
+
   useEffect(() => {
     const cellAmount = (rowsAmount || 0) * (columnsAmount || 0)
 
@@ -107,18 +123,20 @@ export function App() {
   }
   
   return (
-    <RowsContext.Provider value={rowsAmountValue}>
+    <RowsAmountContext.Provider value={rowsAmountValue}>
       <ColumnsContext.Provider value={columnsAmountValue}>
         <NearestContext.Provider value={nearestAmountValue}>
-          <div className={styles.container}>
-            <Header />
+          <RowsContext.Provider value={rowsValue}>
+            <div className={styles.container}>
+              <Header />
 
-            <Table rows={rows} setRows={setRows} />
-          
-          </div>
+              <Table />
+            
+            </div>
+          </RowsContext.Provider>
         </NearestContext.Provider>
       </ColumnsContext.Provider>
-    </RowsContext.Provider>
+    </RowsAmountContext.Provider>
 
   );
 }

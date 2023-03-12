@@ -6,32 +6,11 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   position: relative;
 
-  thead {
-    position: sticky;
-    top: 70px;
-    z-index: 1;
-  }
-
   .tableHead {
     background-color: rgb(67, 67, 224);
     color: #ffffff;
   }
-
-  th {
-    min-width: 120px;
-    width: auto;
-    padding: 15px 15px;
-    font-weight: 600;
-
-    &:not(:last-of-type) {
-      border-right: 1px solid #ffffff;
-    }
-    
-    &.rowHead {
-      min-width: 150px;
-    }
-  }
-
+  
   .rowTitle {
     background-color: rgb(118, 118, 192);
     color: #ffffff; 
