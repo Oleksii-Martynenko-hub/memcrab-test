@@ -94,9 +94,9 @@ export function App() {
     const rowsData = []
 
     for (let r = 0; r < rowsAmount; r++) {
-      const cells = generateCells(r.toString(), columnsAmount)
+      const cells = generateCells(r.toString().padStart(3, '0'), columnsAmount)
 
-      rowsData.push({ id: r.toString(), cells })
+      rowsData.push({ id: r.toString().padStart(3, '0'), cells })
     }
 
     setRows(rowsData)

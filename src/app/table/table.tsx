@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { averageOfSum } from 'src/utils/average-of-sum';
 import { generateCells } from 'src/utils/generateCells';
@@ -64,7 +64,7 @@ export function Table({ rows, setRows }: TableProps) {
   }
 
   const addRowOnClick = () => {
-    const rowId = (+rows[rows.length - 1].id + 1).toString()
+    const rowId = rows.length ? (+rows[rows.length - 1].id + 1).toString().padStart(3, "0") : "000"
     const generatedCells = generateCells(rowId, columnsAmount || 0)
 
     setRows(prev => [...prev, { id: rowId, cells: generatedCells }])
