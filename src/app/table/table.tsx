@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 
 import { averageOfSum } from 'src/utils/average-of-sum';
 import { generateCells } from 'src/utils/generateCells';
@@ -21,6 +21,16 @@ export function Table({ rows, setRows }: TableProps) {
   const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null)
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>([])
 
+  useEffect(() => {
+    if (hoveredCell && nearestAmount !== null) {
+      const nearestValues = findNearestValuesToHoveredCell(hoveredCell, nearestAmount)
+      setNearestCellsByAmount(nearestValues)
+      return
+    }
+    setNearestCellsByAmount([])
+  }, [hoveredCell])
+  
+
   const sumRowValues = (cells: Cell[]) => {
     return cells.reduce((sum, { amount }) => sum + amount, 0)
   };
@@ -35,6 +45,7 @@ export function Table({ rows, setRows }: TableProps) {
     setRows(prev => prev.map(row => {
       if (row.id === rowId) {
         const updatedCells = row.cells.map(cell => {
+          if (cell.id === cellId) setHoveredCell({ ...cell, amount: cell.amount + 1 })
           return cell.id === cellId ? { ...cell, amount: cell.amount + 1 } : cell
         })
         
@@ -112,17 +123,10 @@ export function Table({ rows, setRows }: TableProps) {
 
   const setHoveredCellOnMouseOver = (cell: Cell) => () => {
     setHoveredCell(cell)
-
-    if (nearestAmount !== null) {
-      const nearestValues = findNearestValuesToHoveredCell(cell, nearestAmount)
-        
-      setNearestCellsByAmount(nearestValues)
-    } 
   }
 
   const removeHoveredCellOnMouseLeave = () => {
     setHoveredCell(null)
-    setNearestCellsByAmount([])
   }
 
   const setHoveredSumRowOnMouseOver = (rowId: string) => () => {
@@ -135,7 +139,7 @@ export function Table({ rows, setRows }: TableProps) {
 
   return (
     <table id="randomDigits" className={styles.table}>
-      <thead>
+      <thead className={styles.tableHead}>
         <tr>
           <th key='row-title-head' className={styles.rowHead}>
               <button className={styles.addRowBtn} onClick={addRowOnClick}>
@@ -143,7 +147,7 @@ export function Table({ rows, setRows }: TableProps) {
               </button>
           </th>
 
-          {[...Array(columnsAmount).keys()].map((i) => (
+          {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
             <th key={i}>Column { i + 1 }</th>
           ))}
 
@@ -190,18 +194,18 @@ export function Table({ rows, setRows }: TableProps) {
           </tr>
         ))}
 
-        <tr key='average'>
-          <td key='row-title-cell'>
+        <tr key='average'  className={styles.averageRow}>
+          <td key='row-title-cell' className={styles.tableHead}>
               <button className={styles.addRowBtn} onClick={addRowOnClick}>
                 + add row
               </button>
           </td>
 
-          {[...Array(columnsAmount).keys()].map((i) => (
-            <td key={i}>{averageColumnValues(i)}</td>
+          {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
+            <td key={i} className={styles.averageCell}>{rows.length ? averageColumnValues(i) : 0}</td>
           ))}
 
-          <td key='sum-empty-cell'></td>
+          <td key='sum-empty-cell'>-</td>
         </tr>
       </tbody>
     </table>
