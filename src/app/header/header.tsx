@@ -13,8 +13,30 @@ export function Header(props: HeaderProps) {
   const { columnsAmount, setColumnsAmount } = useContext(ColumnsContext)
   const { nearestAmount, setNearestAmount } = useContext(NearestContext)
 
-  const rowColValidation = (v: number) => v <= 100
+  const rowColValidation = (value: number) => value <= 100
+
+  const setRowsAmountOnChange = (value: number | undefined) => {
+    setRowsAmount(value || null)
+  }
+
+  const setColumnsAmountOnChange = (value: number | undefined) => {
+    setColumnsAmount(value || null)
+  }
   
+  const amountNearestValidationOnChange = (value: number | undefined) => {
+    if (value === undefined) {
+      setNearestAmount(null)
+      return
+    }
+
+    if (value >= (Number(rowsAmount) * Number(columnsAmount))) {
+      setNearestAmount(prev => prev)
+      return
+    }
+
+    setNearestAmount(value)
+  }
+
   const amountNearestValidation = useCallback((v: number) => {
     if (rowsAmount !== null && columnsAmount !== null) {
       return v < rowsAmount * columnsAmount
@@ -26,9 +48,25 @@ export function Header(props: HeaderProps) {
   return (
     <header className={styles.header}>
       <div className={styles.headerContentWrapper}>
-        <InputNumber value={rowsAmount} onChange={setRowsAmount} validate={rowColValidation} />
-        <InputNumber value={columnsAmount} onChange={setColumnsAmount} validate={rowColValidation} />
-        <InputNumber value={nearestAmount} onChange={setNearestAmount} validate={amountNearestValidation} />
+        <InputNumber 
+          value={rowsAmount} 
+          onChange={setRowsAmountOnChange} 
+          validate={rowColValidation} 
+          placeholder="Rows"
+        />
+        <InputNumber 
+          value={columnsAmount} 
+          onChange={setColumnsAmountOnChange} 
+          validate={rowColValidation} 
+          placeholder="Columns"
+        />
+        <InputNumber 
+          value={nearestAmount} 
+          onChange={amountNearestValidationOnChange}
+          validate={amountNearestValidation}
+          disabled={rowsAmount === null || columnsAmount === null}
+          placeholder="Nearest values"
+        />
 
       </div>
     </header>
