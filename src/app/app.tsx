@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
 import { generateCells } from 'src/utils/generateCells';
 import Header from './header/header';
@@ -22,47 +22,22 @@ export type Row = {
   cells: Cell[];
 }
 
-export const RowsAmountContext = createContext<{
-  rowsAmount: number | null
-  setRowsAmount: React.Dispatch<React.SetStateAction<number | null>>
-}>({
-  rowsAmount: null,
-  setRowsAmount: () => void 0,
-})
+type KeyType = string | number | symbol
+type ContextValueType<T, V extends KeyType, A extends KeyType> = Record<V, T> & Record<A, Dispatch<SetStateAction<T>>>
+export type RowsAmountContextType = ContextValueType<number | null, 'rowsAmount', 'setRowsAmount'>
+export const RowsAmountContext = createContext<RowsAmountContextType>({} as RowsAmountContextType)
 
-export const ColumnsContext = createContext<{
-  columnsAmount: number | null
-  setColumnsAmount: React.Dispatch<React.SetStateAction<number | null>>
-}>({
-  columnsAmount: null,
-  setColumnsAmount: () => void 0,
-})
+export type ColumnsContextType = ContextValueType<number | null, 'columnsAmount', 'setColumnsAmount'>
+export const ColumnsContext = createContext<ColumnsContextType>({} as ColumnsContextType)
 
-export const NearestContext = createContext<{
-  nearestAmount: number | null
-  setNearestAmount: React.Dispatch<React.SetStateAction<number | null>>
-}>({
-  nearestAmount: null,
-  setNearestAmount: () => void 0,
-})
+export type NearestContextType = ContextValueType<number | null, 'nearestAmount', 'setNearestAmount'>
+export const NearestContext = createContext<NearestContextType>({} as NearestContextType)
 
-export const RowsContext = createContext<{
-  rows: Row[]
-  setRows: React.Dispatch<React.SetStateAction<Row[]>>
-}>({
-  rows: [],
-  setRows: () => void 0,
-})
+export type RowsContextType = ContextValueType<Row[], 'rows', 'setRows'>
+export const RowsContext = createContext<RowsContextType>({} as RowsContextType)
 
-export const HoveredSumRowContext = createContext<{
-  hoveredSumRow: string | null
-  setHoveredSumRow: React.Dispatch<React.SetStateAction<string | null>>
-}>({
-  hoveredSumRow: null,
-  setHoveredSumRow: () => void 0,
-})
-
-export const HoveredCellContext = createContext(0)
+export type HoveredSumRowContextType = ContextValueType<string | null, 'hoveredSumRow', 'setHoveredSumRow'>
+export const HoveredSumRowContext = createContext<HoveredSumRowContextType>({} as HoveredSumRowContextType)
 
 export function App() {
   const [rows, setRows] = useState<Row[]>([])
