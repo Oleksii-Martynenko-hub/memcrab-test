@@ -3,8 +3,8 @@ import { useContext } from 'react';
 import { roundTo } from 'src/utils/roundTo';
 import { averageOfSum } from 'src/utils/average-of-sum';
 
-import { ColumnsContext, RowsContext } from '../app';
-import Button from '../button/button';
+import { ColumnsContext, RowsContext } from 'src/app/app';
+import Button from 'src/app/components/button/button';
 
 import styles from './footer-table.module.scss';
 

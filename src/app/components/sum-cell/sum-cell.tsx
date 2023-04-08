@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { Cell, HoveredSumRowContext } from '../app';
+import { Cell, HoveredSumRowContext } from 'src/app/app';
 
 import styles from './sum-cell.module.scss';
 

@@ -1,7 +1,7 @@
 import { useCallback, useContext } from 'react';
 
-import { ColumnsContext, NearestContext, RowsAmountContext } from '../app';
-import InputNumber from '../input-number/input-number';
+import { ColumnsContext, NearestContext, RowsAmountContext } from 'src/app/app';
+import InputNumber from 'src/app/components/input-number/input-number';
 
 import styles from './header.module.scss';
 

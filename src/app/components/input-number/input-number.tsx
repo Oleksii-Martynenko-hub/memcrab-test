@@ -1,4 +1,10 @@
-import { NumericFormat, NumericFormatProps, NumberFormatValues, OnValueChange } from 'react-number-format';
+import {
+  NumericFormat,
+  NumericFormatProps,
+  NumberFormatValues,
+  OnValueChange
+} from 'react-number-format';
+
 import styles from './input-number.module.scss';
 
 export interface InputNumberProps extends Omit<NumericFormatProps, 'value' | 'onChange'> {

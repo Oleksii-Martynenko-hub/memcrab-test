@@ -1,10 +1,6 @@
-import { createContext, Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useMemo, useState } from 'react';
 
-import { generateCells } from 'src/utils/generateCells';
-import Header from './header/header';
-import Table from './table/table';
-
-import styles from './app.module.scss';
+import Main from 'src/app/containers/main/main';
 
 export interface InputData {
   rows: number;
@@ -45,7 +41,7 @@ export function App() {
   const [columnsAmount, setColumnsAmount] = useState<number | null>(null)
   const [nearestAmount, setNearestAmount] = useState<number | null>(null)
   const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null) //
-  
+
   const rowsAmountValue = useMemo(
     () => ({
       rowsAmount,
@@ -85,34 +81,6 @@ export function App() {
     }),
     [hoveredSumRow],
   )
-
-  useEffect(() => {
-    const cellAmount = (rowsAmount || 0) * (columnsAmount || 0)
-
-    if (nearestAmount !== null && nearestAmount >= cellAmount) {
-      setNearestAmount(cellAmount < 1 ? 0 : cellAmount - 1)
-    }
-
-    generateDataRows(rowsAmount || 0, columnsAmount || 0)
-    
-  }, [rowsAmount, columnsAmount])
-
-  const generateDataRows = (rowsAmount: number, columnsAmount: number) => {
-    if (
-      (rows.length && rows[0].cells.length) && 
-      (rowsAmount === rows.length && columnsAmount === rows[0].cells.length)
-    ) return
-
-    const rowsData = []
-
-    for (let r = 0; r < rowsAmount; r++) {
-      const cells = generateCells(r.toString().padStart(3, '0'), columnsAmount)
-
-      rowsData.push({ id: r.toString().padStart(3, '0'), cells })
-    }
-
-    setRows(rowsData)
-  }
   
   return (
     <RowsAmountContext.Provider value={rowsAmountValue}>
@@ -120,12 +88,7 @@ export function App() {
         <NearestContext.Provider value={nearestAmountValue}>
           <RowsContext.Provider value={rowsValue}>
             <HoveredSumRowContext.Provider value={hoveredSumRowValue}>
-              <div className={styles.container}>
-                <Header />
-
-                <Table />
-              
-              </div>
+              <Main />
             </HoveredSumRowContext.Provider>
           </RowsContext.Provider>
         </NearestContext.Provider>

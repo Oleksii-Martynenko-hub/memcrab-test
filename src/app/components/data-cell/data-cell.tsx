@@ -7,7 +7,7 @@ import {
   Cell,
   RowsContext,
   HoveredSumRowContext,
-} from '../app';
+} from 'src/app/app';
 
 import styles from './data-cell.module.scss';
 

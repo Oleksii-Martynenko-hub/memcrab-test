@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { RowsAmountContext, RowsContext } from '../app';
+import { RowsAmountContext, RowsContext } from 'src/app/app';
 
 import styles from './row-title-cell.module.scss';
 
