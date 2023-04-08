@@ -36,9 +36,9 @@ export function Main(props: MainProps) {
     const rowsData = []
 
     for (let r = 0; r < rowsAmount; r++) {
-      const cells = generateCells(r.toString().padStart(3, "0"), columnsAmount)
+      const cells = generateCells(r.toString(), columnsAmount)
 
-      rowsData.push({ id: r.toString().padStart(3, "0"), cells })
+      rowsData.push({ id: r.toString(), cells })
     }
 
     setRows(rowsData)

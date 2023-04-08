@@ -5,7 +5,7 @@ export const generateCells = (rowId: string, amount: number) => {
 
   for (let c = 0; c < amount; c++) {
     const num = generateRandomNumber(999);
-    cells.push({ id: rowId + c.toString().padStart(2, '0'), amount: num })
+    cells.push({ id: `${rowId}_${c}`, amount: num })
   }
 
   return cells
