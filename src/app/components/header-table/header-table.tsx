@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import { ColumnsContext } from 'src/app/app';
 import Button from 'src/app/components/button/button';
@@ -44,4 +44,4 @@ export function HeaderTable({ addRow, ...props }: HeaderTableProps) {
   );
 }
 
-export default HeaderTable;
+export default memo(HeaderTable);

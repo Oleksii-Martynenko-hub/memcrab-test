@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, memo } from 'react';
 
 import styles from './button.module.scss';
 
@@ -11,4 +11,4 @@ export function Button({ ...props }: ButtonProps) {
   );
 }
 
-export default Button;
+export default memo(Button);

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import { Cell, HoveredSumRowContext } from 'src/app/app';
 
@@ -37,4 +37,4 @@ export function SumCell({ rowId, cells, ...props }: SumCellProps) {
   );
 }
 
-export default SumCell;
+export default memo(SumCell);

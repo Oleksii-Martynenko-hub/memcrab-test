@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import { RowsAmountContext, RowsContext } from 'src/app/app';
 
@@ -28,4 +28,4 @@ export function RowTitleCell({ rowId, ...props }: RowTitleCellProps) {
   );
 }
 
-export default RowTitleCell;
+export default memo(RowTitleCell);

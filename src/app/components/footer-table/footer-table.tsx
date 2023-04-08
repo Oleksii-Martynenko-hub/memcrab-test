@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import { roundTo } from 'src/utils/roundTo';
 import { averageOfSum } from 'src/utils/average-of-sum';
@@ -45,4 +45,4 @@ export function FooterTable({ addRow, ...props }: FooterTableProps) {
   );
 }
 
-export default FooterTable;
+export default memo(FooterTable);

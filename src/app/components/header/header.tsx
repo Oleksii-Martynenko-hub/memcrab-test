@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { memo, useCallback, useContext } from 'react';
 
 import { ColumnsContext, NearestContext, RowsAmountContext } from 'src/app/app';
 import InputNumber from 'src/app/components/input-number/input-number';
@@ -76,4 +76,4 @@ export function Header(props: HeaderProps) {
   );
 }
 
-export default Header;
+export default memo(Header);

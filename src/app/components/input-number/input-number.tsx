@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import {
   NumericFormat,
   NumericFormatProps,
@@ -13,7 +14,8 @@ export interface InputNumberProps extends Omit<NumericFormatProps, 'value' | 'on
   validate: (value: number) => boolean;
   tooltip?: string
 }
-
+// TODO: try to use memo with react-number-format or replace by custom input with simple validation and обмеженнями
+// to prevent unnecessary re-rendering
 export function InputNumber({ value, onChange, validate, tooltip, ...props}: InputNumberProps) {
 
   const onValueChange: OnValueChange = (v) => {
@@ -43,4 +45,4 @@ export function InputNumber({ value, onChange, validate, tooltip, ...props}: Inp
   );
 }
 
-export default InputNumber;
+export default memo(InputNumber);

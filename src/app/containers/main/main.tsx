@@ -2,7 +2,7 @@ import Table from 'src/app/components/table/table';
 import Header from 'src/app/components/header/header';
 
 import styles from './main.module.scss';
-import { useContext, useEffect } from 'react';
+import { memo, useContext, useEffect } from 'react';
 import { ColumnsContext, NearestContext, RowsAmountContext, RowsContext } from 'src/app/app';
 import { generateCells } from 'src/utils/generateCells';
 
@@ -16,7 +16,7 @@ export function Main(props: MainProps) {
   const { nearestAmount, setNearestAmount } = useContext(NearestContext)
 
 
-   useEffect(() => {
+  useEffect(() => {
     const cellAmount = (rowsAmount || 0) * (columnsAmount || 0)
 
     if (nearestAmount !== null && nearestAmount >= cellAmount) {
@@ -53,4 +53,4 @@ export function Main(props: MainProps) {
   );
 }
 
-export default Main;
+export default memo(Main);

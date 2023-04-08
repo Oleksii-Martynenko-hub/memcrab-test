@@ -1,6 +1,7 @@
 import {
   useContext,
   HTMLAttributes,
+  memo,
 } from 'react';
 
 import {
@@ -88,4 +89,4 @@ export function DataCell({
   );
 }
 
-export default DataCell;
+export default memo(DataCell);

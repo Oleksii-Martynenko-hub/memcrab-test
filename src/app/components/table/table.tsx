@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { memo, useContext, useEffect, useState } from 'react';
 
 import { generateCells } from 'src/utils/generateCells';
 
@@ -39,7 +39,7 @@ export function Table(props: TableProps) {
     }
     setNearestCellsByAmount([])
   }, [hoveredCell])
-  
+
 
   const addRow = () => {
     const rowId = rows.length.toString()
@@ -59,7 +59,7 @@ export function Table(props: TableProps) {
       .slice(0, nearestAmount)
       .map(c => c.id)
   }
-  
+
   return (
     <table id="randomDigits" className={styles.table}>
       <HeaderTable addRow={addRow} />
@@ -92,4 +92,4 @@ export function Table(props: TableProps) {
   );
 }
 
-export default Table;
+export default memo(Table);
