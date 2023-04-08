@@ -32,15 +32,8 @@ export function Table(props: TableProps) {
 
   useEffect(() => {
     if (hoveredCell && nearestAmount !== null) {
-    const start = Date.now()
-
-      for (let i = 0; i < 30; i++) {
-        findNearestValuesToHoveredCell(hoveredCell, nearestAmount)
-      }
       const nearestValues = findNearestValuesToHoveredCell(hoveredCell, nearestAmount)
 
-    const end = Date.now()
-    console.log('new version', end - start + ' ms');
       setNearestCellsByAmount(nearestValues)
       return
     }
