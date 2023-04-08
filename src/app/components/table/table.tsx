@@ -32,20 +32,6 @@ export function Table(props: TableProps) {
 
   useEffect(() => {
     if (hoveredCell && nearestAmount !== null) {
-      // const start1 = Date.now()
-      // for (let i = 0; i < 10; i++) findNearestValuesToHoveredCellOld(hoveredCell, nearestAmount)
-      // const end1 = Date.now()
-      // console.log('old version time of 10 runs: ', end1 - start1 + ' ms');
-
-      const start2 = Date.now()
-      for (let i = 0; i < 10; i++) findNearestValuesToHoveredCell2(hoveredCell, nearestAmount)
-      const end2 = Date.now()
-
-      const start3 = Date.now()
-      for (let i = 0; i < 10; i++) findNearestValuesToHoveredCell(hoveredCell, nearestAmount)
-      const end3 = Date.now()
-      console.log(`10 runs - old: ${end2 - start2}, new:${end3 - start3}, ${((end2 - start2) / (end3 - start3)).toFixed(1)} times faster`);
-      
       const nearestValues = findNearestValuesToHoveredCell(hoveredCell, nearestAmount)
 
       setNearestCellsByAmount(nearestValues)
@@ -64,25 +50,6 @@ export function Table(props: TableProps) {
     setRowsAmount(prev => (prev || 0) + 1)
   }
 
-  const findNearestValuesToHoveredCell3 = (cell: Cell, nearestAmount: number) => {
-    const row = +cell.id.split('_')[0];
-    const col = +cell.id.split('_')[1];
-    const currentValue = cell.amount;
-    const result = [];
-
-    for (let i = 0; i < (rowsAmount || 0); i++) {
-      for (let j = 0; j < (columnsAmount || 0); j++) {
-        if (i !== row || j !== col) {
-          const diff = Math.abs(currentValue - rows[i].cells[j].amount);
-          result.push({ id: rows[i].cells[j].id, diff });
-        }
-      }
-    }
-
-    return result.sort((a, b) => a.diff - b.diff).slice(0, nearestAmount).map(c => c.id)
-  }
-
-
   const findNearestValuesToHoveredCell = (cell: Cell, nearestAmount: number) => {
     return rows
       .reduce((acc: Cell[], {cells}) => acc.concat(cells), [])
@@ -92,58 +59,7 @@ export function Table(props: TableProps) {
       .slice(0, nearestAmount)
       .map(c => c.id)
   }
-
-  const findNearestValuesToHoveredCell2 = (cell: Cell, nearestAmount: number) => {
-    const nearestCells: (Cell & {indexOfCommonArr: number })[] = []
-
-    const commonCells = rows
-      .reduce((acc: Cell[], { cells }) => {
-        return [...acc, ...cells]
-      }, [])
-      .sort((a, b) => a.amount - b.amount)
-
-    const indexOfCell = commonCells.map(c => c.id).indexOf(cell.id)
-
-    const getNearestCellsByIndex = (
-      amount: number,
-      indexOfStart: number,
-      differenceIncrement = 0,
-      isIncrementIndex = true
-    ) => {
-      if (nearestCells.length < nearestAmount) {
-        for (let x = 0; x < amount; x++) {
-          const needlyIndex = isIncrementIndex ? indexOfStart + 1 + x : indexOfStart - (1 + x)
-          if (commonCells[needlyIndex] && Math.abs(commonCells[needlyIndex].amount - cell.amount) === differenceIncrement) {
-            nearestCells.push({ ...commonCells[needlyIndex], indexOfCommonArr: needlyIndex })
-            continue
-          }
-          break
-        }
-
-        nearestCells.sort((a, b) => a.indexOfCommonArr - b.indexOfCommonArr)
-
-        const updateIndexOfStart = nearestCells.length 
-          ? isIncrementIndex 
-            ? indexOfCell + 1 === nearestCells[0].indexOfCommonArr ? indexOfCell : nearestCells[0].indexOfCommonArr
-            : indexOfCell - 1 === nearestCells[nearestCells.length - 1].indexOfCommonArr ? indexOfCell : nearestCells[nearestCells.length - 1].indexOfCommonArr
-          : isIncrementIndex 
-            ? indexOfCell
-            : indexOfCell
-
-        getNearestCellsByIndex(
-          nearestAmount - nearestCells.length,
-          updateIndexOfStart,
-          isIncrementIndex ? differenceIncrement : differenceIncrement + 1,
-          !isIncrementIndex,
-        )
-      }
-    }
-
-    getNearestCellsByIndex(nearestAmount, indexOfCell)
-
-    return nearestCells.map(c => c.id)
-}
-
+  
   return (
     <table id="randomDigits" className={styles.table}>
       <HeaderTable addRow={addRow} />
