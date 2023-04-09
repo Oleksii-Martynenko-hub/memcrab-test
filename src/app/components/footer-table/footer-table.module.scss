@@ -2,17 +2,6 @@
   background-color: rgb(67, 67, 224);
   height: 60px;
   
-  .averageCell {
-    background-color: rgb(255 241 197);
-    position: sticky;
-    bottom: -3px;
-    
-    &.empty {
-      background: #fff;
-      right: 0;
-    }
-  }
-  
   .cellWrapWithBorder {
     border-right: 1px solid #ffffff;
     background-color: rgb(67, 67, 224);

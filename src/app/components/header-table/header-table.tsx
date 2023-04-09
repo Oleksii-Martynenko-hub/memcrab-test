@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext } from 'react';
 
 import { ColumnsContext } from 'src/app/app';
-import Button from 'src/app/components/button/button';
+import Button from 'src/app/components/common/button/button';
 
 import styles from './header-table.module.scss';
 
