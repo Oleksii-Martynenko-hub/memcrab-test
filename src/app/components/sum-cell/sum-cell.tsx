@@ -1,22 +1,16 @@
-import { memo, useContext } from 'react';
-
-import { Cell, HoveredSumRowContext } from 'src/app/app';
+import { memo } from 'react';
 
 import styles from './sum-cell.module.scss';
 
 export interface SumCellProps {
   rowId: string;
-  cells: Cell[];
+  sum: number;
+  setHoveredSumRow: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export function SumCell({ rowId, cells, ...props }: SumCellProps) {
-  const { setHoveredSumRow } = useContext(HoveredSumRowContext)
+export function SumCell({ rowId, sum, setHoveredSumRow, ...props }: SumCellProps) {
 
-  const sumRowValues = (cells: Cell[]) => {
-    return cells.reduce((sum, { amount }) => sum + amount, 0)
-  }; 
-
-  const setHoveredSumRowOnMouseOver = (rowId: string) => () => {
+  const setHoveredSumRowOnMouseOver = () => {
     setHoveredSumRow(rowId)
   }
 
@@ -28,11 +22,11 @@ export function SumCell({ rowId, cells, ...props }: SumCellProps) {
     <td 
       key={'sum' + rowId} 
       className={styles.sumCell}
-      onMouseOver={setHoveredSumRowOnMouseOver(rowId)}
+      onMouseOver={setHoveredSumRowOnMouseOver}
       onMouseLeave={removeHoveredSumRowOnMouseLeave}
       {...props}
     >
-      {sumRowValues(cells)}
+      {sum}
     </td>
   );
 }

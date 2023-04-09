@@ -39,7 +39,7 @@ export function App() {
   const [rows, setRows] = useState<Row[]>([])
   const [rowsAmount, setRowsAmount] = useState<number | null>(100)
   const [columnsAmount, setColumnsAmount] = useState<number | null>(100)
-  const [nearestAmount, setNearestAmount] = useState<number | null>(9000)
+  const [nearestAmount, setNearestAmount] = useState<number | null>(3000)
   const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null) //
 
   const rowsAmountValue = useMemo(

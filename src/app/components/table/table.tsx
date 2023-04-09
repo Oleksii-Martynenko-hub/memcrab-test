@@ -4,6 +4,7 @@ import { generateCells } from 'src/utils/generateCells';
 
 import {
   Cell,
+  HoveredSumRowContext,
   NearestContext,
   RowsAmountContext,
   RowsContext
@@ -24,6 +25,7 @@ export function Table(props: TableProps) {
   const { rows, setRows } = useContext(RowsContext)
   const { setRowsAmount } = useContext(RowsAmountContext)
   const { nearestAmount } = useContext(NearestContext)
+  const { hoveredSumRow, setHoveredSumRow } = useContext(HoveredSumRowContext)
 
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>([])
@@ -59,6 +61,15 @@ export function Table(props: TableProps) {
       .map(c => c.id)
   }
 
+  const sumRowValues = (cells: Cell[]) => {
+    return cells.reduce((sum, { amount }) => sum + amount, 0)
+  }; 
+
+  const percentOfSum = (cells: Cell[], currentCellAmount: number) => {
+    const sumOfCellAmount = cells.reduce((sum, { amount }) => sum + amount, 0)
+    return currentCellAmount / sumOfCellAmount * 100
+  }
+
   return (
     <table id="randomDigits" className={styles.table}>
       <HeaderTable addRow={addRow} />
@@ -66,7 +77,7 @@ export function Table(props: TableProps) {
       <tbody>
         {rows.map(({ id: rowId, cells }) => (
           <tr key={rowId}>
-            <RowTitleCell rowId={rowId} />
+            <RowTitleCell rowId={rowId} setRows={setRows} setRowsAmount={setRowsAmount} />
 
             {cells.map(({ id: cellId, amount }) => (
               <DataCell
@@ -74,14 +85,16 @@ export function Table(props: TableProps) {
                 cellId={cellId}
                 rowId={rowId}
                 amount={amount}
-                cells={cells}
+                percentOfSum={hoveredSumRow === rowId ? percentOfSum(cells, amount) : null}
+                isShowPercentOfSum={hoveredSumRow === rowId}
                 isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
-                isHovered={hoveredCell?.id === cellId }
+                isHovered={hoveredCell?.id === cellId}
                 setHoveredCell={setHoveredCell}
+                setRows={setRows}
               />
             ))}
 
-            <SumCell rowId={rowId} cells={cells} />
+            <SumCell rowId={rowId} sum={sumRowValues(cells)} setHoveredSumRow={setHoveredSumRow} />
           </tr>
         ))}
 
