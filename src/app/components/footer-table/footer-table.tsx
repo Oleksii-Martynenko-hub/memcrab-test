@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { memo, useCallback, useContext } from 'react';
 
 import { roundTo } from 'src/utils/roundTo';
 import { averageOfSum } from 'src/utils/average-of-sum';
@@ -22,9 +22,9 @@ export function FooterTable({ addRow, ...props }: FooterTableProps) {
     return roundTo( averageOfSum(cellsValues), 2)
   };
 
-  const addRowOnClick = () => {
+  const addRowOnClick = useCallback(() => {
     addRow()
-  }
+  }, [])
 
   return (
     <tr key='footer-table'  className={styles.averageRow} {...props}>

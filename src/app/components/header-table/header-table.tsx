@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { memo, useCallback, useContext } from 'react';
 
 import { ColumnsContext } from 'src/app/app';
 import Button from 'src/app/components/button/button';
@@ -12,9 +12,9 @@ export interface HeaderTableProps {
 export function HeaderTable({ addRow, ...props }: HeaderTableProps) {
   const { columnsAmount } = useContext(ColumnsContext)
 
-  const addRowOnClick = () => {
+  const addRowOnClick = useCallback(() => {
     addRow()
-  }
+  }, [])
 
   return (
     <thead className={styles.tableHead} {...props}>

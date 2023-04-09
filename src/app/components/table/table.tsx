@@ -1,10 +1,9 @@
-import { memo, useContext, useEffect, useState } from 'react';
+import { memo, useCallback, useContext, useEffect, useState } from 'react';
 
 import { generateCells } from 'src/utils/generateCells';
 
 import {
   Cell,
-  ColumnsContext,
   NearestContext,
   RowsAmountContext,
   RowsContext
@@ -23,8 +22,7 @@ export interface TableProps {}
 
 export function Table(props: TableProps) {
   const { rows, setRows } = useContext(RowsContext)
-  const { rowsAmount, setRowsAmount } = useContext(RowsAmountContext)
-  const { columnsAmount } = useContext(ColumnsContext)
+  const { setRowsAmount } = useContext(RowsAmountContext)
   const { nearestAmount } = useContext(NearestContext)
 
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
@@ -40,15 +38,16 @@ export function Table(props: TableProps) {
     setNearestCellsByAmount([])
   }, [hoveredCell])
 
-
-  const addRow = () => {
-    const rowId = rows.length.toString()
-    const generatedCells = generateCells(rowId, columnsAmount || 0)
-
-    setRows(prev => [...prev, { id: rowId, cells: generatedCells }])
+  const addRow = useCallback(() => {
+    setRows(prev => {
+      const rowId = prev.length.toString()
+      const cellAmount = prev.length ? prev[0].cells.length : 0
+      const generatedCells = generateCells(rowId, cellAmount)
+      return [...prev, { id: rowId, cells: generatedCells }]
+    })
 
     setRowsAmount(prev => (prev || 0) + 1)
-  }
+  }, [])
 
   const findNearestValuesToHoveredCell = (cell: Cell, nearestAmount: number) => {
     return rows
