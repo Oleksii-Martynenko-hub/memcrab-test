@@ -33,7 +33,6 @@ export function Table(props: TableProps) {
   useEffect(() => {
     if (hoveredCell && nearestAmount !== null) {
       const nearestValues = findNearestValuesToHoveredCell(hoveredCell, nearestAmount)
-
       setNearestCellsByAmount(nearestValues)
       return
     }
