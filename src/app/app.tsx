@@ -37,9 +37,9 @@ export const HoveredSumRowContext = createContext<HoveredSumRowContextType>({} a
 
 export function App() {
   const [rows, setRows] = useState<Row[]>([])
-  const [rowsAmount, setRowsAmount] = useState<number | null>(100)
-  const [columnsAmount, setColumnsAmount] = useState<number | null>(100)
-  const [nearestAmount, setNearestAmount] = useState<number | null>(3000)
+  const [rowsAmount, setRowsAmount] = useState<number | null>(200)
+  const [columnsAmount, setColumnsAmount] = useState<number | null>(200)
+  const [nearestAmount, setNearestAmount] = useState<number | null>(20000)
   const [hoveredSumRow, setHoveredSumRow] = useState<string | null>(null) //
 
   const rowsAmountValue = useMemo(
