@@ -1,10 +1,13 @@
+import { memo, useContext, useEffect, useRef } from 'react';
+
+import { generateCells } from 'src/utils/generateCells';
+
+import { ColumnsContext, NearestContext, RowsAmountContext, RowsContext } from 'src/app/app';
 import Table from 'src/app/components/table/table';
 import Header from 'src/app/components/header/header';
+import { useVirtualize } from 'src/app/components/hooks/useVirtualize';
 
 import styles from './main.module.scss';
-import { memo, useContext, useEffect } from 'react';
-import { ColumnsContext, NearestContext, RowsAmountContext, RowsContext } from 'src/app/app';
-import { generateCells } from 'src/utils/generateCells';
 
 /* eslint-disable-next-line */
 export interface MainProps {}
@@ -14,6 +17,16 @@ export function Main(props: MainProps) {
   const { rowsAmount } = useContext(RowsAmountContext)
   const { columnsAmount } = useContext(ColumnsContext)
   const { nearestAmount, setNearestAmount } = useContext(NearestContext)
+
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const virtualizeProps = useVirtualize( {
+    element: containerRef.current,
+    widthItem: 120,
+    heightItem: 51,
+    offsetY: 208,
+    offsetX: 150 + 120,
+  })
 
 
   useEffect(() => {
@@ -45,10 +58,10 @@ export function Main(props: MainProps) {
   }
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       <Header />
 
-      <Table />
+      <Table {...virtualizeProps} />
     </div>
   );
 }

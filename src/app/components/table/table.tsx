@@ -1,9 +1,11 @@
-import { memo, useCallback, useContext, useEffect, useState } from 'react';
+import { forwardRef, memo, useCallback, useContext, useEffect, useState } from 'react';
+import { FixedSizeList as List, FixedSizeGrid as Grid } from 'react-window';
 
 import { generateCells } from 'src/utils/generateCells';
 
 import {
   Cell,
+  ColumnsContext,
   HoveredSumRowContext,
   NearestContext,
   RowsAmountContext,
@@ -11,19 +13,27 @@ import {
 } from 'src/app/app';
 
 import SumCell from 'src/app/components/sum-cell/sum-cell';
+import RowEmpty from 'src/app/components/row-empty/row-empty';
 import DataCell from 'src/app/components/data-cell/data-cell';
 import HeaderTable from 'src/app/components/header-table/header-table';
 import FooterTable from 'src/app/components/footer-table/footer-table';
 import RowTitleCell from 'src/app/components/row-title-cell/row-title-cell';
+import { DataCellEmpty } from 'src/app/components/data-cell-empty/data-cell-empty';
 
 import styles from './table.module.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TableProps {}
+export interface TableProps {
+  topIndex: number;
+  bottomIndex: number;
+  leftIndex: number;
+  rightIndex: number;
+}
 
-export function Table(props: TableProps) {
+export function Table({ topIndex, leftIndex, bottomIndex, rightIndex }: TableProps) {
   const { rows, setRows } = useContext(RowsContext)
-  const { setRowsAmount } = useContext(RowsAmountContext)
+  const { rowsAmount, setRowsAmount } = useContext(RowsAmountContext)
+  const { columnsAmount } = useContext(ColumnsContext)
   const { nearestAmount } = useContext(NearestContext)
   const { hoveredSumRow, setHoveredSumRow } = useContext(HoveredSumRowContext)
 
@@ -74,31 +84,46 @@ export function Table(props: TableProps) {
       <HeaderTable addRow={addRow} />
 
       <tbody>
-        {rows.map(({ id: rowId, cells }) => (
+        <RowEmpty isShown={topIndex > 0} height={topIndex * 51} colSpan={columnsAmount || 0} />
+
+        {rows.map(({ id: rowId, cells }, i) => i >= topIndex && i <= bottomIndex ? (
           <tr key={rowId}>
             <RowTitleCell rowId={rowId} setRows={setRows} setRowsAmount={setRowsAmount} />
 
-            {cells.map(({ id: cellId, amount }) => (
-              <DataCell
-                key={cellId}
-                cellId={cellId}
-                rowId={rowId}
-                amount={amount}
-                percentOfSum={hoveredSumRow === rowId ? percentOfSum(cells, amount) : null}
-                isShowPercentOfSum={hoveredSumRow === rowId}
-                isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
-                isHovered={hoveredCell?.id === cellId}
-                setHoveredCell={setHoveredCell}
-                setRows={setRows}
-              />
+            <DataCellEmpty isShow={leftIndex > 0} colSpan={leftIndex} />
+
+            {cells.map(({ id: cellId, amount }, i) => i >= leftIndex && i <= rightIndex ? (
+                <DataCell
+                  key={cellId}
+                  cellId={cellId}
+                  rowId={rowId}
+                  amount={amount}
+                  percentOfSum={hoveredSumRow === rowId ? percentOfSum(cells, amount) : null}
+                  isShowPercentOfSum={hoveredSumRow === rowId}
+                  isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
+                  isHovered={hoveredCell?.id === cellId}
+                  setHoveredCell={setHoveredCell}
+                  setRows={setRows}
+                />
+              ) : (
+                null
             ))}
+
+            <DataCellEmpty isShow={rightIndex < cells.length - 1} colSpan={cells.length - rightIndex - 1} />
 
             <SumCell rowId={rowId} sum={sumRowValues(cells)} setHoveredSumRow={setHoveredSumRow} />
           </tr>
+        ) : (
+          null
         ))}
 
+        <RowEmpty 
+          isShown={bottomIndex < (rowsAmount || 0) - 1} 
+          height={((rowsAmount || 0) - bottomIndex - 1) * 51} 
+          colSpan={columnsAmount || 0} 
+        />
       </tbody>
-      
+
       <FooterTable addRow={addRow} />
     </table>
   );
