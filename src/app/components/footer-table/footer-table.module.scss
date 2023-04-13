@@ -1,17 +1,26 @@
-.averageRow {
-  background-color: rgb(67, 67, 224);
-  height: 60px;
-  
-  .cellWrapWithBorder {
-    border-right: 1px solid #ffffff;
+.footerTable {
+  position: sticky;
+  bottom: 0;
+  .averageRow {
     background-color: rgb(67, 67, 224);
-    padding: 15px 15px;
-  }
-  
-  .rowTitle {
-    padding: 0;
-    position: sticky;
-    left: 0;
-    z-index: 1;
+    height: 60px;
+    border: none;
+
+    td {
+      padding: 0;
+    }
+    
+    .cellWrapWithBorder {
+      border-right: 1px solid #ffffff;
+      background-color: rgb(67, 67, 224);
+      padding: 15px 15px;
+    }
+    
+    .rowTitle {
+      padding: 0;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+    }
   }
 }

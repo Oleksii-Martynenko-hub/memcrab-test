@@ -1,6 +1,8 @@
 .container {
-  width: fit-content;
+  width: 100%;
+  height: 100%;
+  max-width: 1280px;
   min-width: 375px;
   margin: 0 auto;
-  padding: 90px 0 40px;
+  padding: 64px 0 40px;
 }

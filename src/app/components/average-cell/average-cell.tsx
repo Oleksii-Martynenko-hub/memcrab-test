@@ -20,7 +20,7 @@ export function AverageCell({
       ${isEmpty && styles.empty}`}
       {...props}
     >
-      {children || averageValue}
+      <div className={styles.cellWrapWithBorder}>{children || averageValue}</div>
     </td>
   );
 }

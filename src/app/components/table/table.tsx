@@ -97,8 +97,9 @@ export function Table(props: TableProps) {
           </tr>
         ))}
 
-        <FooterTable addRow={addRow} />
       </tbody>
+      
+      <FooterTable addRow={addRow} />
     </table>
   );
 }

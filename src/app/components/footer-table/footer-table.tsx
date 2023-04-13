@@ -28,24 +28,26 @@ export function FooterTable({ addRow, ...props }: FooterTableProps) {
   }, [])
 
   return (
-    <tr key='footer-table'  className={styles.averageRow} {...props}>
-      <td key='row-title-cell' className={`${styles.averageCell} ${styles.rowTitle}`}>
-        <div className={styles.cellWrapWithBorder}>
-          <Button onClick={addRowOnClick}>
-            + add row
-          </Button>
-        </div>
-      </td>
+    <tfoot key='footer-table'  className={styles.footerTable} {...props}>
+      <tr className={styles.averageRow}>
+        <td key='row-title-cell' className={`${styles.averageCell} ${styles.rowTitle}`}>
+          <div className={styles.cellWrapWithBorder}>
+            <Button onClick={addRowOnClick}>
+              + add row
+            </Button>
+          </div>
+        </td>
 
-      {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
-        <AverageCell
-          key={i}
-          averageValue={rows.length ? averageColumnValues(i) : 0}
-        />
-      ))}
+        {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) =>  (
+          <AverageCell
+            key={i}
+            averageValue={rows.length ? averageColumnValues(i) : 0}
+          />
+        ))}
 
-      <AverageCell key='sum-empty-cell' isEmpty>{!rows.length && !columnsAmount ? 'empty' : '-'}</AverageCell>
-    </tr>
+        <AverageCell key='sum-empty-cell' isEmpty>{!rows.length && !columnsAmount ? 'empty' : '-'}</AverageCell>
+      </tr>
+    </tfoot>
   );
 }
 
