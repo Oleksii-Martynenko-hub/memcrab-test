@@ -1,5 +1,4 @@
-import { forwardRef, memo, useCallback, useContext, useEffect, useState } from 'react';
-import { FixedSizeList as List, FixedSizeGrid as Grid } from 'react-window';
+import {  memo, useCallback, useContext, useEffect, useState } from 'react';
 
 import { generateCells } from 'src/utils/generateCells';
 
@@ -28,9 +27,10 @@ export interface TableProps {
   bottomIndex: number;
   leftIndex: number;
   rightIndex: number;
+  isScrolling: boolean;
 }
 
-export function Table({ topIndex, leftIndex, bottomIndex, rightIndex }: TableProps) {
+export function Table({ topIndex, leftIndex, bottomIndex, rightIndex, isScrolling }: TableProps) {
   const { rows, setRows } = useContext(RowsContext)
   const { rowsAmount, setRowsAmount } = useContext(RowsAmountContext)
   const { columnsAmount } = useContext(ColumnsContext)
@@ -80,7 +80,7 @@ export function Table({ topIndex, leftIndex, bottomIndex, rightIndex }: TablePro
   }
 
   return (
-    <table id="randomDigits" className={styles.table}>
+    <table id="randomDigits" className={`${styles.table} ${isScrolling && styles.scrolling}`}>
       <HeaderTable addRow={addRow} />
 
       <tbody>

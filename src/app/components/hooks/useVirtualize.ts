@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+
 import { useResize } from "./useResize";
 import { useScroll } from "./useScroll";
 
@@ -18,15 +19,16 @@ export function useVirtualize({
   offsetY,
   offsetX,
 }: UseVirtualize) {
-  const { scrollLeft, scrollTop } = useScroll(element)
-  const { width, height } = useResize()
-
-  const [extraRows] = useState(5)
-  const [extraCols] = useState(3)
+  const [extraRows] = useState(8)
+  const [extraCols] = useState(4)
   const [topIndex, setTopIndex] = useState(0)
   const [bottomIndex, setBottomIndex] = useState(0)
   const [leftIndex, setLeftIndex] = useState(0)
   const [rightIndex, setRightIndex] = useState(0)
+  
+  const { scrollLeft, scrollTop, isScrolling } = useScroll(element)
+  const { width, height } = useResize()
+  
 
   useEffect(() => {
     const startRowIndex = Math.floor(scrollTop/heightItem) - extraRows
@@ -47,6 +49,7 @@ export function useVirtualize({
     topIndex,
     bottomIndex,
     leftIndex,
-    rightIndex
+    rightIndex,
+    isScrolling,
   };
 }
