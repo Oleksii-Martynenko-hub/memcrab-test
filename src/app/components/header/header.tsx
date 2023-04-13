@@ -13,7 +13,7 @@ export function Header(props: HeaderProps) {
   const { columnsAmount, setColumnsAmount } = useContext(ColumnsContext)
   const { nearestAmount, setNearestAmount } = useContext(NearestContext)
 
-  const rowColValidation = (value: number) => value <= 100
+  const rowColValidation = (value: number) => value <= 300
 
   const setRowsAmountOnChange = (value: number | undefined) => {
     setRowsAmount(value || null)
@@ -53,14 +53,14 @@ export function Header(props: HeaderProps) {
           onChange={setRowsAmountOnChange} 
           validate={rowColValidation} 
           placeholder="Rows"
-          tooltip='Rows amount needs for the table generation. You can create or remove rows in the table.'
+          tooltip='Rows amount needs for the table generation. You can create or remove rows in the table. Max value 300.'
         />
         <InputNumber 
           value={columnsAmount} 
           onChange={setColumnsAmountOnChange} 
           validate={rowColValidation} 
           placeholder="Columns"
-          tooltip='Columns amount needs for the table generation.'
+          tooltip='Columns amount needs for the table generation. Max value 300.'
         />
         <InputNumber 
           value={nearestAmount} 
