@@ -1,0 +1,28 @@
+tr {
+  border-bottom: 1px solid #dddddd;
+
+  &:last-of-type {
+    border-bottom: 3px solid gray;
+  }
+}
+
+td {
+  padding: 8px 15px;
+  height: 50px;
+  vertical-align: middle;
+  transition: background-color 0.2s;
+  
+  &:not(:last-of-type) {
+    border-right: 1px solid #dddddd;
+    text-align: center;
+  }
+
+  &:first-of-type {
+    text-align: left;
+  }
+
+  &:last-of-type {
+    padding-right: 30px;
+    text-align: right;
+  }
+}

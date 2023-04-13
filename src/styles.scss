@@ -1,3 +1,9 @@
+html, body, #root {
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
