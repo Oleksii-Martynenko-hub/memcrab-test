@@ -10,42 +10,47 @@ import AverageCell from 'src/app/components/average-cell/average-cell';
 import styles from './footer-table.module.scss';
 
 export interface FooterTableProps {
-  addRow: () => void
+  addRow: () => void;
 }
 
 export function FooterTable({ addRow, ...props }: FooterTableProps) {
-  const { rows } = useContext(RowsContext)
-  const { columnsAmount } = useContext(ColumnsContext)
+  const { rows } = useContext(RowsContext);
+  const { columnsAmount } = useContext(ColumnsContext);
 
   const averageColumnValues = (index: number) => {
-    const cellsValues = rows.map(({ cells }) => cells[index] ? cells[index].amount : 0)
+    const cellsValues = rows.map(({ cells }) =>
+      cells[index] ? cells[index].amount : 0
+    );
 
-    return roundTo(averageOfSum(cellsValues), 2)
+    return roundTo(averageOfSum(cellsValues), 2);
   };
 
   const addRowOnClick = useCallback(() => {
-    addRow()
-  }, [])
+    addRow();
+  }, []);
 
   return (
-    <tfoot key='footer-table'  className={styles.footerTable} {...props}>
+    <tfoot key="footer-table" className={styles.footerTable} {...props}>
       <tr className={styles.averageRow}>
-        <td key='row-title-cell' className={`${styles.averageCell} ${styles.rowTitle}`}>
+        <td
+          key="row-title-cell"
+          className={`${styles.averageCell} ${styles.rowTitle}`}
+        >
           <div className={styles.cellWrapWithBorder}>
-            <Button onClick={addRowOnClick}>
-              + add row
-            </Button>
+            <Button onClick={addRowOnClick}>+ add row</Button>
           </div>
         </td>
 
-        {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) =>  (
+        {(columnsAmount ? [...Array(columnsAmount).keys()] : []).map((i) => (
           <AverageCell
             key={i}
             averageValue={rows.length ? averageColumnValues(i) : 0}
           />
         ))}
 
-        <AverageCell key='sum-empty-cell' isEmpty>{!rows.length && !columnsAmount ? 'empty' : '-'}</AverageCell>
+        <AverageCell key="sum-empty-cell" isEmpty>
+          {!rows.length && !columnsAmount ? 'empty' : '-'}
+        </AverageCell>
       </tr>
     </tfoot>
   );

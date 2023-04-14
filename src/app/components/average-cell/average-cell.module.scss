@@ -1,7 +1,7 @@
 td.averageCell {
   position: sticky;
   bottom: -3px;
-  
+
   .cellWrapWithBorder {
     border-right: 1px solid #dddddd;
     background-color: rgb(255 241 197);
@@ -10,10 +10,9 @@ td.averageCell {
     line-height: 34px;
     font-size: 15px;
   }
-  
+
   &:nth-last-of-type(2) {
     border-right: 4px solid gray !important;
-
   }
 
   &.empty {

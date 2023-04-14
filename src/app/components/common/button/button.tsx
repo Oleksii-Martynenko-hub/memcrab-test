@@ -6,9 +6,7 @@ import styles from './button.module.scss';
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {}
 
 export function Button({ ...props }: ButtonProps) {
-  return (
-    <button className={styles.addRowBtn} {...props} />
-  );
+  return <button className={styles.addRowBtn} {...props} />;
 }
 
 export default memo(Button);
