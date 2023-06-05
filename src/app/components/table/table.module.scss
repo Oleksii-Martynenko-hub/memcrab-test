@@ -1,4 +1,6 @@
 .table {
+  margin: 0 auto;
+  overflow: scroll;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border-collapse: collapse;
@@ -8,18 +10,22 @@
 
   tr {
     border-bottom: 1px solid #dddddd;
-
-    &:last-of-type {
-      border-bottom: 3px solid gray;
-    }
   }
-  
+
+  tbody tr:last-of-type {
+    border-bottom: 3px solid gray;
+  }
+
+  tbody tr:first-of-type {
+    border-top: 3px solid gray;
+  }
+
   td {
     padding: 8px 15px;
     height: 50px;
     vertical-align: middle;
     transition: background-color 0.2s;
-    
+
     &:not(:last-of-type) {
       border-right: 1px solid #dddddd;
       text-align: center;
@@ -29,9 +35,21 @@
       text-align: left;
     }
 
+    &:nth-of-type(2) {
+      border-left: 3px solid gray;
+    }
+
+    &:nth-last-of-type(2) {
+      border-right: 3px solid gray;
+    }
+
     &:last-of-type {
       padding-right: 30px;
       text-align: right;
     }
+  }
+
+  &.scrolling td {
+    pointer-events: none;
   }
 }

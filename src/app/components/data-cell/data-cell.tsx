@@ -1,13 +1,6 @@
-import {
-  useContext,
-  HTMLAttributes,
-} from 'react';
+import { memo, HTMLAttributes } from 'react';
 
-import {
-  Cell,
-  RowsContext,
-  HoveredSumRowContext,
-} from 'src/app/app';
+import { Row, Cell } from 'src/app/app';
 
 import styles from './data-cell.module.scss';
 
@@ -16,76 +9,80 @@ export interface DataCellProps extends HTMLAttributes<HTMLTableCellElement> {
   cellId: string;
   rowId: string;
   amount: number;
-  cells: Cell[];
-  isHovered: boolean;
+  percentOfSum: number | null;
+  isShowPercentOfSum: boolean;
   isNearestToHovered: boolean;
+  isHovered: boolean;
   setHoveredCell: React.Dispatch<React.SetStateAction<Cell | null>>;
+  setRows: (value: React.SetStateAction<Row[]>) => void;
 }
 
 export function DataCell({
   cellId,
   rowId,
   amount,
-  cells,
-  isHovered,
+  percentOfSum,
+  isShowPercentOfSum,
   isNearestToHovered,
+  isHovered,
   setHoveredCell,
+  setRows,
   ...props
 }: DataCellProps) {
-  const { setRows } = useContext(RowsContext)
-  const { hoveredSumRow } = useContext(HoveredSumRowContext)
+  const incrementCellValueOnClick = () => {
+    setRows((prev) =>
+      prev.map((row) => {
+        if (row.id === rowId) {
+          const updatedCells = row.cells.map((cell) => {
+            if (cell.id === cellId)
+              setHoveredCell({ ...cell, amount: cell.amount + 1 });
+            return cell.id === cellId
+              ? { ...cell, amount: cell.amount + 1 }
+              : cell;
+          });
 
-  const incrementCellValueOnClick = (rowId: string, cellId: string) => () => {
-    setRows(prev => prev.map(row => {
-      if (row.id === rowId) {
-        const updatedCells = row.cells.map(cell => {
-          if (cell.id === cellId) setHoveredCell({ ...cell, amount: cell.amount + 1 })
-          return cell.id === cellId ? { ...cell, amount: cell.amount + 1 } : cell
-        })
-        
-        return { ...row, cells: updatedCells }
-      }
+          return { ...row, cells: updatedCells };
+        }
 
-      return row
-    }))
-  }
+        return row;
+      })
+    );
+  };
 
   const setHoveredCellOnMouseOver = (cell: Cell) => () => {
-    setHoveredCell(cell)
-  }
+    setHoveredCell(cell);
+  };
 
   const removeHoveredCellOnMouseLeave = () => {
-    setHoveredCell(null)
-  }
-
-  const percentOfSum = () => {
-    const sumOfCellAmount = cells.reduce((sum, { amount }) => sum + amount, 0)
-    return (amount / sumOfCellAmount * 100).toFixed(2)
-  }
+    setHoveredCell(null);
+  };
 
   return (
-    <td 
-      key={cellId} 
+    <td
+      key={cellId}
       className={`
         ${styles.dataCell}
         ${styles.increment}
-        ${hoveredSumRow === rowId && styles.percentGradient}
+        ${isShowPercentOfSum && styles.percentGradient}
         ${isNearestToHovered && styles.nearest}
-      `} 
-      style={{ "--percent": `${percentOfSum()}%` } as React.CSSProperties}
-      onClick={incrementCellValueOnClick(rowId, cellId)}
+      `}
+      style={
+        {
+          '--percent': `${(percentOfSum || 0).toFixed(2)}%`,
+        } as React.CSSProperties
+      }
+      onClick={incrementCellValueOnClick}
       onMouseOver={setHoveredCellOnMouseOver({ id: cellId, amount })}
       onMouseLeave={removeHoveredCellOnMouseLeave}
       {...props}
     >
       {isHovered
-        ? `${amount} +1` 
-        : hoveredSumRow === rowId 
-          ? `${percentOfSum()}%` 
-          : amount
-      }
+        ? `${amount} +1`
+        : isShowPercentOfSum
+        ? `${(percentOfSum || 0).toFixed(2)}%`
+        : amount}
     </td>
   );
 }
 
-export default DataCell;
+export default memo(DataCell);

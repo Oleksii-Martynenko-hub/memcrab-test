@@ -1,6 +1,6 @@
 .rowTitle {
   background-color: rgb(118, 118, 192);
-  color: #ffffff; 
+  color: #ffffff;
   display: flex;
   align-items: center;
   position: sticky;
@@ -21,11 +21,11 @@
   user-select: none;
   overflow: hidden;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: rgb(209, 90, 83);
   }
-  
+
   span {
     display: block;
     font-size: 34px;
