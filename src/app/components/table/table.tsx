@@ -20,23 +20,13 @@ import RowTitleCell from 'src/app/components/row-title-cell/row-title-cell';
 import { DataCellEmpty } from 'src/app/components/data-cell-empty/data-cell-empty';
 
 import styles from './table.module.scss';
+import { useVirtualize } from '../hooks/useVirtualize';
+import { AVERAGE_CELL_HEIGHT, CELL_HEIGHT, CELL_WIDTH, HEADER_HEIGHT, ROW_HEAD_WIDTH, SUM_CELL_WIDTH, THEAD_CELL_HEIGHT } from 'src/app/constants/constants';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TableProps {
-  topIndex: number;
-  bottomIndex: number;
-  leftIndex: number;
-  rightIndex: number;
-  isScrolling: boolean;
-}
+export interface TableProps {}
 
-export function Table({
-  topIndex,
-  leftIndex,
-  bottomIndex,
-  rightIndex,
-  isScrolling,
-}: TableProps) {
+export function Table(props: TableProps) {
   const { rows, setRows } = useContext(RowsContext);
   const { rowsAmount, setRowsAmount } = useContext(RowsAmountContext);
   const { columnsAmount } = useContext(ColumnsContext);
@@ -47,6 +37,14 @@ export function Table({
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>(
     []
   );
+
+  const { topIndex, leftIndex, bottomIndex, rightIndex, isScrolling } =
+  useVirtualize({
+    widthItem: CELL_WIDTH,
+    heightItem: CELL_HEIGHT,
+    offsetY: HEADER_HEIGHT + THEAD_CELL_HEIGHT + AVERAGE_CELL_HEIGHT,
+    offsetX: ROW_HEAD_WIDTH + SUM_CELL_WIDTH,
+  });
 
   useEffect(() => {
     if (hoveredCell && nearestAmount !== null) {
@@ -62,7 +60,7 @@ export function Table({
 
   const addRow = useCallback(() => {
     setRows((prev) => {
-      const rowId = prev.length.toString();
+      const rowId = prev.length ? (+prev[prev.length - 1].id + 1).toString() : "0";
       const cellAmount = prev.length ? prev[0].cells.length : 0;
       const generatedCells = generateCells(rowId, cellAmount);
       return [...prev, { id: rowId, cells: generatedCells }];
@@ -107,51 +105,47 @@ export function Table({
           colSpan={columnsAmount || 0}
         />
 
-        {rows.map(({ id: rowId, cells }, i) =>
-          i >= topIndex && i <= bottomIndex ? (
-            <tr key={rowId}>
-              <RowTitleCell
+        {rows.slice(topIndex, bottomIndex + 1).map(({ id: rowId, cells }) => (
+          <tr key={rowId}>
+            <RowTitleCell
+              rowId={rowId}
+              setRows={setRows}
+              setRowsAmount={setRowsAmount}
+            />
+
+            <DataCellEmpty isShow={leftIndex > 0} colSpan={leftIndex} />
+
+            {cells.slice(leftIndex, rightIndex + 1).map(({ id: cellId, amount }) => (
+              <DataCell
+                key={cellId}
+                cellId={cellId}
                 rowId={rowId}
+                amount={amount}
+                percentOfSum={
+                  hoveredSumRow === rowId
+                    ? percentOfSum(cells, amount)
+                    : null
+                }
+                isShowPercentOfSum={hoveredSumRow === rowId}
+                isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
+                isHovered={hoveredCell?.id === cellId}
+                setHoveredCell={setHoveredCell}
                 setRows={setRows}
-                setRowsAmount={setRowsAmount}
               />
+            ))}
 
-              <DataCellEmpty isShow={leftIndex > 0} colSpan={leftIndex} />
+            <DataCellEmpty
+              isShow={rightIndex < cells.length - 1}
+              colSpan={cells.length - rightIndex - 1}
+            />
 
-              {cells.map(({ id: cellId, amount }, i) =>
-                i >= leftIndex && i <= rightIndex ? (
-                  <DataCell
-                    key={cellId}
-                    cellId={cellId}
-                    rowId={rowId}
-                    amount={amount}
-                    percentOfSum={
-                      hoveredSumRow === rowId
-                        ? percentOfSum(cells, amount)
-                        : null
-                    }
-                    isShowPercentOfSum={hoveredSumRow === rowId}
-                    isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
-                    isHovered={hoveredCell?.id === cellId}
-                    setHoveredCell={setHoveredCell}
-                    setRows={setRows}
-                  />
-                ) : null
-              )}
-
-              <DataCellEmpty
-                isShow={rightIndex < cells.length - 1}
-                colSpan={cells.length - rightIndex - 1}
-              />
-
-              <SumCell
-                rowId={rowId}
-                sum={sumRowValues(cells)}
-                setHoveredSumRow={setHoveredSumRow}
-              />
-            </tr>
-          ) : null
-        )}
+            <SumCell
+              rowId={rowId}
+              sum={sumRowValues(cells)}
+              setHoveredSumRow={setHoveredSumRow}
+            />
+          </tr>
+        ))}
 
         <RowEmpty
           isShown={bottomIndex < (rowsAmount || 0) - 1}
