@@ -60,7 +60,7 @@ export function Table(props: TableProps) {
 
   const addRow = useCallback(() => {
     setRows((prev) => {
-      const rowId = prev.length.toString();
+      const rowId = prev.length ? (+prev[prev.length - 1].id + 1).toString() : "0";
       const cellAmount = prev.length ? prev[0].cells.length : 0;
       const generatedCells = generateCells(rowId, cellAmount);
       return [...prev, { id: rowId, cells: generatedCells }];
