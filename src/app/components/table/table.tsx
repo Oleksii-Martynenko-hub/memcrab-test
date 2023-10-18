@@ -20,23 +20,12 @@ import RowTitleCell from 'src/app/components/row-title-cell/row-title-cell';
 import { DataCellEmpty } from 'src/app/components/data-cell-empty/data-cell-empty';
 
 import styles from './table.module.scss';
+import { useVirtualize } from '../hooks/useVirtualize';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TableProps {
-  topIndex: number;
-  bottomIndex: number;
-  leftIndex: number;
-  rightIndex: number;
-  isScrolling: boolean;
-}
+export interface TableProps {}
 
-export function Table({
-  topIndex,
-  leftIndex,
-  bottomIndex,
-  rightIndex,
-  isScrolling,
-}: TableProps) {
+export function Table(props: TableProps) {
   const { rows, setRows } = useContext(RowsContext);
   const { rowsAmount, setRowsAmount } = useContext(RowsAmountContext);
   const { columnsAmount } = useContext(ColumnsContext);
@@ -47,6 +36,14 @@ export function Table({
   const [nearestCellIdsByAmount, setNearestCellsByAmount] = useState<string[]>(
     []
   );
+
+  const { topIndex, leftIndex, bottomIndex, rightIndex, isScrolling } =
+  useVirtualize({
+    widthItem: 120,
+    heightItem: 51,
+    offsetY: 208,
+    offsetX: 150 + 120,
+  });
 
   useEffect(() => {
     if (hoveredCell && nearestAmount !== null) {

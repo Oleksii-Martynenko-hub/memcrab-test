@@ -5,7 +5,6 @@ import { useScroll } from './useScroll';
 import { useTimeout } from './useTimeout';
 
 interface UseVirtualize {
-  element: HTMLElement | null;
   widthItem: number;
   heightItem: number;
   offsetX: number;
@@ -13,7 +12,6 @@ interface UseVirtualize {
 }
 
 export function useVirtualize({
-  element,
   widthItem,
   heightItem,
   offsetY,
