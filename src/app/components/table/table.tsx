@@ -105,51 +105,47 @@ export function Table(props: TableProps) {
           colSpan={columnsAmount || 0}
         />
 
-        {rows.map(({ id: rowId, cells }, i) =>
-          i >= topIndex && i <= bottomIndex ? (
-            <tr key={rowId}>
-              <RowTitleCell
+        {rows.slice(topIndex, bottomIndex + 1).map(({ id: rowId, cells }) => (
+          <tr key={rowId}>
+            <RowTitleCell
+              rowId={rowId}
+              setRows={setRows}
+              setRowsAmount={setRowsAmount}
+            />
+
+            <DataCellEmpty isShow={leftIndex > 0} colSpan={leftIndex} />
+
+            {cells.slice(leftIndex, rightIndex + 1).map(({ id: cellId, amount }) => (
+              <DataCell
+                key={cellId}
+                cellId={cellId}
                 rowId={rowId}
+                amount={amount}
+                percentOfSum={
+                  hoveredSumRow === rowId
+                    ? percentOfSum(cells, amount)
+                    : null
+                }
+                isShowPercentOfSum={hoveredSumRow === rowId}
+                isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
+                isHovered={hoveredCell?.id === cellId}
+                setHoveredCell={setHoveredCell}
                 setRows={setRows}
-                setRowsAmount={setRowsAmount}
               />
+            ))}
 
-              <DataCellEmpty isShow={leftIndex > 0} colSpan={leftIndex} />
+            <DataCellEmpty
+              isShow={rightIndex < cells.length - 1}
+              colSpan={cells.length - rightIndex - 1}
+            />
 
-              {cells.map(({ id: cellId, amount }, i) =>
-                i >= leftIndex && i <= rightIndex ? (
-                  <DataCell
-                    key={cellId}
-                    cellId={cellId}
-                    rowId={rowId}
-                    amount={amount}
-                    percentOfSum={
-                      hoveredSumRow === rowId
-                        ? percentOfSum(cells, amount)
-                        : null
-                    }
-                    isShowPercentOfSum={hoveredSumRow === rowId}
-                    isNearestToHovered={nearestCellIdsByAmount.includes(cellId)}
-                    isHovered={hoveredCell?.id === cellId}
-                    setHoveredCell={setHoveredCell}
-                    setRows={setRows}
-                  />
-                ) : null
-              )}
-
-              <DataCellEmpty
-                isShow={rightIndex < cells.length - 1}
-                colSpan={cells.length - rightIndex - 1}
-              />
-
-              <SumCell
-                rowId={rowId}
-                sum={sumRowValues(cells)}
-                setHoveredSumRow={setHoveredSumRow}
-              />
-            </tr>
-          ) : null
-        )}
+            <SumCell
+              rowId={rowId}
+              sum={sumRowValues(cells)}
+              setHoveredSumRow={setHoveredSumRow}
+            />
+          </tr>
+        ))}
 
         <RowEmpty
           isShown={bottomIndex < (rowsAmount || 0) - 1}
