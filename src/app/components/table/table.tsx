@@ -21,6 +21,7 @@ import { DataCellEmpty } from 'src/app/components/data-cell-empty/data-cell-empt
 
 import styles from './table.module.scss';
 import { useVirtualize } from '../hooks/useVirtualize';
+import { AVERAGE_CELL_HEIGHT, CELL_HEIGHT, CELL_WIDTH, HEADER_HEIGHT, ROW_HEAD_WIDTH, SUM_CELL_WIDTH, THEAD_CELL_HEIGHT } from 'src/app/constants/constants';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TableProps {}
@@ -39,10 +40,10 @@ export function Table(props: TableProps) {
 
   const { topIndex, leftIndex, bottomIndex, rightIndex, isScrolling } =
   useVirtualize({
-    widthItem: 120,
-    heightItem: 51,
-    offsetY: 208,
-    offsetX: 150 + 120,
+    widthItem: CELL_WIDTH,
+    heightItem: CELL_HEIGHT,
+    offsetY: HEADER_HEIGHT + THEAD_CELL_HEIGHT + AVERAGE_CELL_HEIGHT,
+    offsetX: ROW_HEAD_WIDTH + SUM_CELL_WIDTH,
   });
 
   useEffect(() => {
