@@ -11,12 +11,12 @@ import {
 import Table from 'src/app/components/table/table';
 import Header from 'src/app/components/header/header';
 
-import styles from './main.module.scss';
+import styles from './main-container.module.scss';
 
 /* eslint-disable-next-line */
-export interface MainProps {}
+export interface MainContainerProps {}
 
-export function Main(props: MainProps) {
+export function MainContainer(props: MainContainerProps) {
   const { rows, setRows } = useContext(RowsContext);
   const { rowsAmount } = useContext(RowsAmountContext);
   const { columnsAmount } = useContext(ColumnsContext);
@@ -61,4 +61,4 @@ export function Main(props: MainProps) {
   );
 }
 
-export default memo(Main);
+export default memo(MainContainer);

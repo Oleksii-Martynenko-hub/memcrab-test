@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-import Main from 'src/app/containers/main/main';
+import MainContainer from 'src/app/containers/main/main-container';
 
 export interface InputData {
   rows: number;
@@ -121,7 +121,7 @@ export function App() {
         <NearestContext.Provider value={nearestAmountValue}>
           <RowsContext.Provider value={rowsValue}>
             <HoveredSumRowContext.Provider value={hoveredSumRowValue}>
-              <Main />
+              <MainContainer />
             </HoveredSumRowContext.Provider>
           </RowsContext.Provider>
         </NearestContext.Provider>
